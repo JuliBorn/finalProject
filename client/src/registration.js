@@ -1,15 +1,13 @@
-import axios from "axios";
+import axios from "./axios";
+
 import { Component } from "react";
 
 export default class Registration extends Component {
     constructor() {
         super();
         this.state = {
-            error: false,
-            first: "",
-            last: "",
-            email: "",
-            password: "",
+            userError: false,
+            dbError: false,
         };
     }
     handleChange(e) {
@@ -26,22 +24,33 @@ export default class Registration extends Component {
             password: this.state.password,
         };
 
-        axios
-            .post("/registration", userData)
-            .then((response) => {
-                console.log("Response", response.data.error);
-                if (response.data.error) {
-                    console.log("ERROR");
-                    this.setState({
-                        error: true,
-                    });
-                } else {
-                    location.replace("/");
-                }
-            })
-            .catch((err) => {
-                console.log(err);
+        if (
+            userData.first &&
+            userData.last &&
+            userData.email &&
+            userData.password
+        ) {
+            axios
+                .post("/registration", userData)
+                .then((response) => {
+                    console.log("Response", response.data.error);
+                    if (response.data.error) {
+                        console.log("ERROR");
+                        this.setState({
+                            dbError: true,
+                        });
+                    } else {
+                        location.replace("/");
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else {
+            this.setState({
+                userError: true,
             });
+        }
     }
 
     render() {
@@ -50,7 +59,8 @@ export default class Registration extends Component {
                 <div className="body_container">
                     <div className="auth_form">
                         <h1>Register</h1>
-                        {this.state.error && <p>Something broke</p>}
+                        {this.state.userError && <p>All field required</p>}
+                        {this.state.dbError && <p>eMail already used</p>}
                         <div className="register_form">
                             <div className="input_field">
                                 <input

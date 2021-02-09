@@ -4,10 +4,14 @@ const compression = require("compression");
 const path = require("path");
 
 const cookieSession = require("cookie-session");
+const csurf = require("csurf");
 
 const { compare, hash } = require("./bc.js");
-
 const db = require("./db");
+
+app.use(express.json());
+app.use(compression());
+app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
 let secrets;
 if (process.env.cookie_secret) {
@@ -23,11 +27,19 @@ app.use(
     })
 );
 
-app.use(express.json());
+app.use(csurf());
 
-app.use(compression());
+app.use((req, res, next) => {
+    res.cookie("geheimestoken", req.csrfToken());
+    next();
+});
 
-app.use(express.static(path.join(__dirname, "..", "client", "public")));
+app.use((req, res, next) => {
+    console.log("req.url", req.url);
+    console.log("req.session:", req.session);
+
+    next();
+});
 
 app.get("/welcome", (req, res) => {
     if (req.session.userId) {
@@ -49,6 +61,7 @@ app.get("*", function (req, res) {
 
 app.post("/registration", (req, res) => {
     console.log("Post request made to /registration", req.body);
+
     hash(req.body.password).then((hashedPw) => {
         console.log("Password hashed");
         db.addUser(req.body.first, req.body.last, req.body.email, hashedPw)
@@ -63,7 +76,7 @@ app.post("/registration", (req, res) => {
             })
             .catch((err) => {
                 console.log("Error adding to DB", err);
-                return res.json({ error: true });
+                res.json({ error: true });
             });
     });
 });
