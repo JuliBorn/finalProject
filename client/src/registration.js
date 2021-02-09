@@ -38,6 +38,7 @@ export default class Registration extends Component {
                         console.log("ERROR");
                         this.setState({
                             dbError: true,
+                            userError: false,
                         });
                     } else {
                         location.replace("/");

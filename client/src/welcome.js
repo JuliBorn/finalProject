@@ -5,6 +5,7 @@ import { HashRouter, Route } from "react-router-dom";
 
 import Registration from "./registration";
 import Login from "./login";
+import ResetPassword from "./reset_password";
 
 import Header from "./header";
 import Footer from "./footer";
@@ -17,6 +18,7 @@ export default function Welcome() {
                 <div>
                     <Route exact path="/" component={Registration} />
                     <Route path="/login" component={Login} />
+                    <Route path="/password" component={ResetPassword} />
                 </div>
             </HashRouter>
             <Footer />

@@ -6,6 +6,7 @@ const path = require("path");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 
+const { sendEmail } = require("./ses");
 const { compare, hash } = require("./bc.js");
 const db = require("./db");
 
@@ -80,6 +81,17 @@ app.post("/registration", (req, res) => {
             });
     });
 });
+
+// app.get("/edit", (req, res) => {
+//     console.log("Email route hit");
+//     sendEmail("juliusbornmuc@gmail.com", "Hello", "Urgent")
+//         .then(() => {
+//             console.log("Email send!");
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//         });
+// });
 
 app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
