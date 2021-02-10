@@ -20,7 +20,10 @@ export default function Welcome() {
                         <div>
                             <Route exact path="/" component={Registration} />
                             <Route path="/login" component={Login} />
-                            <Route path="/password" component={ResetPassword} />
+                            <Route
+                                path="/password-reset"
+                                component={ResetPassword}
+                            />
                         </div>
                     </HashRouter>
                 </div>

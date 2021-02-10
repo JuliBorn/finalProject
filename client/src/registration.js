@@ -108,6 +108,7 @@ export default class Registration extends Component {
                         Register
                     </button>
                     <Link to="/login">Login</Link>
+                    <Link to="/password-reset">Forget Password?</Link>
                 </div>
             </div>
         );

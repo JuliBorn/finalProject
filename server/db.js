@@ -16,3 +16,9 @@ module.exports.getUserByEmail = (email) => {
     const params = [email];
     return db.query(q, params);
 };
+
+module.exports.storeResetCode = (reset_code, email) => {
+    const q = `INSERT INTO reset_codes (code, email) VALUES ($1, $2)`;
+    const params = [reset_code, email];
+    return db.query(q, params);
+};

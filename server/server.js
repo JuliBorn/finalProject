@@ -2,11 +2,12 @@ const express = require("express");
 const app = express();
 const compression = require("compression");
 const path = require("path");
-
+const cryptoRandomString = require("crypto-random-string");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 
 const { sendEmail } = require("./ses");
+
 const { compare, hash } = require("./bc.js");
 const db = require("./db");
 
@@ -105,6 +106,43 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/password/reset/start", (req, res) => {
+    console.log("Password reset start: ", req.body);
+
+    db.getUserByEmail(req.body.email)
+        .then((result) => {
+            console.log("Result from Database", result.rows);
+            if (result.rows[0]) {
+                console.log("Result from DB", result.rows[0]);
+
+                const secretCode = cryptoRandomString({
+                    length: 6,
+                });
+
+                console.log("Secret Code: ", secretCode);
+
+                db.storeResetCode(secretCode, req.body.email)
+                    .then((result) => {
+                        console.log("Reset Code stored", result);
+                        const message = `Hello, `;
+                        sendEmail(
+                            "opposite.fibre@spicedling.email",
+                            message,
+                            "Reset_code"
+                        );
+                        res.json({ success: true });
+                    })
+                    .catch((err) => {
+                        console.log("Error in DB", err);
+                    });
+            } else {
+                console.log("No Email found");
+                res.json({ error: true });
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
     // this runs when the user enters their email in ResetPassword
     /*
         things to do here 
@@ -118,9 +156,6 @@ app.post("/password/reset/start", (req, res) => {
 
     // secret code stuff :D
     // this generates a random string of 6 characters
-    const secretCode = cryptoRandomString({
-        length: 6,
-    });
 
     // we need to store the secret code somewhere
     // we're going to store the secret code in a new table!
