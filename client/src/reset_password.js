@@ -1,43 +1,44 @@
-import axios from "./axios";
+import React from "react";
 
-import { Component } from "react";
-
-export default class ResetPassword extends Component {
-    constructor() {
-        super();
-        this.state = {};
-    }
-    handleChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
+export default class ResetPassword extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            renderView: 1,
+        };
     }
 
-    handleClick() {}
+    determineWhichViewToRender() {
+        if (this.state.renderView === 1) {
+            return (
+                <div>
+                    <input name="email" placeholder="eMail" />
+                    <button>Submit</button>
+                </div>
+            );
+        } else if (this.state.renderView === 2) {
+            return (
+                <div>
+                    <input name="password" placeholder = ""/>
+                    <input name="code" />
+                    <button></button>
+                </div>
+            );
+        } else if (this.state.renderView === 3) {
+            return (
+                <div>
+                    <h1>success</h1>
+                </div>
+            );
+        }
+    }
 
     render() {
         return (
-            <div className="body">
-                <div className="body_container">
-                    <h1>Reset Password</h1>
-                    <div className="reset_form">
-                        <div className="input_field">
-                            <input
-                                onChange={(e) => this.handleChange(e)}
-                                type="text"
-                                placeholder="eMail"
-                                className="text"
-                                name="email"
-                            />
-                        </div>
-
-                        <button
-                            onClick={() => this.handleClick()}
-                            id="login-button"
-                            className="text"
-                        >
-                            Submit
-                        </button>
-                    </div>
-                </div>
+            <div>
+                <h1>reset password</h1>
+                {this.state.error && <p>error</p>}
+                {this.determineWhichViewToRender()}
             </div>
         );
     }

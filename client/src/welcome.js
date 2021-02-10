@@ -13,15 +13,19 @@ import Footer from "./footer";
 export default function Welcome() {
     return (
         <>
-            <Header />
-            <HashRouter>
-                <div>
-                    <Route exact path="/" component={Registration} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/password" component={ResetPassword} />
+            <div className="body">
+                <Header />
+                <div className="body_container">
+                    <HashRouter>
+                        <div>
+                            <Route exact path="/" component={Registration} />
+                            <Route path="/login" component={Login} />
+                            <Route path="/password" component={ResetPassword} />
+                        </div>
+                    </HashRouter>
                 </div>
-            </HashRouter>
-            <Footer />
+                <Footer />
+            </div>
         </>
     );
 }

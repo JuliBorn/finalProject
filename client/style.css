@@ -32,6 +32,7 @@
 
 header {
     height: auto;
+    border: 6px solid var(--sec);
 }
 
 .body_container {
@@ -65,7 +66,7 @@ header {
 
 footer {
     background-color: var(--prim-dark);
-    height: 100px;
+    /* height: 100px; */
 }
 
 /* Header */
@@ -132,8 +133,7 @@ button:hover {
 .auth_form {
     border: 2px var(--sec) solid;
     background-color: var(--light);
-
-    position: fixed;
+    position: absolute;
     bottom: 0px;
     right: 100px;
     opacity: 0.8;

@@ -1,12 +1,13 @@
 import ReactDOM from "react-dom";
 
 import Welcome from "./welcome";
+import App from "./app";
 
-// let elem;
-// if (location.pathname === "/welcome") {
-//     elem = <Welcome />;
-// } else {
-//     elem = <p>not allowed</p>;
-// }
+let elem;
+if (location.pathname === "/welcome") {
+    elem = <Welcome />;
+} else {
+    elem = <App />;
+}
 
-ReactDOM.render(<Welcome />, document.querySelector("main"));
+ReactDOM.render(elem, document.querySelector("main"));

@@ -2,6 +2,8 @@ import axios from "./axios";
 
 import { Component } from "react";
 
+import { Link } from "react-router-dom";
+
 export default class Registration extends Component {
     constructor() {
         super();
@@ -56,59 +58,56 @@ export default class Registration extends Component {
 
     render() {
         return (
-            <div className="body">
-                <div className="body_container">
-                    <div className="auth_form">
-                        <h1>Register</h1>
-                        {this.state.userError && <p>All field required</p>}
-                        {this.state.dbError && <p>eMail already used</p>}
-                        <div className="register_form">
-                            <div className="input_field">
-                                <input
-                                    onChange={(e) => this.handleChange(e)}
-                                    type="text"
-                                    placeholder="First Name"
-                                    className="text"
-                                    name="first"
-                                />
-                            </div>
-                            <div className="input_field">
-                                <input
-                                    onChange={(e) => this.handleChange(e)}
-                                    type="text"
-                                    placeholder="Last Name"
-                                    className="text"
-                                    name="last"
-                                />
-                            </div>
-                            <div className="input_field">
-                                <input
-                                    onChange={(e) => this.handleChange(e)}
-                                    type="text"
-                                    placeholder="eMail"
-                                    className="text"
-                                    name="email"
-                                />
-                            </div>
-                            <div className="input_field">
-                                <input
-                                    onChange={(e) => this.handleChange(e)}
-                                    type="password"
-                                    placeholder="Password"
-                                    className="text"
-                                    name="password"
-                                />
-                            </div>
+            <div className="auth_form">
+                <h1>Register</h1>
 
-                            <button
-                                onClick={() => this.handleClick()}
-                                id="login-button"
-                                className="text"
-                            >
-                                Login
-                            </button>
-                        </div>
+                <div className="register_form">
+                    <div className="input_field">
+                        <input
+                            onChange={(e) => this.handleChange(e)}
+                            type="text"
+                            placeholder="First Name"
+                            className="text"
+                            name="first"
+                        />
                     </div>
+                    <div className="input_field">
+                        <input
+                            onChange={(e) => this.handleChange(e)}
+                            type="text"
+                            placeholder="Last Name"
+                            className="text"
+                            name="last"
+                        />
+                    </div>
+                    <div className="input_field">
+                        <input
+                            onChange={(e) => this.handleChange(e)}
+                            type="email"
+                            placeholder="eMail"
+                            className="text"
+                            name="email"
+                        />
+                    </div>
+                    <div className="input_field">
+                        <input
+                            onChange={(e) => this.handleChange(e)}
+                            type="password"
+                            placeholder="Password"
+                            className="text"
+                            name="password"
+                        />
+                    </div>
+                    {this.state.userError && <p>All field required</p>}
+                    {this.state.dbError && <p>eMail already used</p>}
+                    <button
+                        onClick={() => this.handleClick()}
+                        id="login-button"
+                        className="text"
+                    >
+                        Register
+                    </button>
+                    <Link to="/login">Login</Link>
                 </div>
             </div>
         );

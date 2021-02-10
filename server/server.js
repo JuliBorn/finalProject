@@ -82,16 +82,87 @@ app.post("/registration", (req, res) => {
     });
 });
 
-// app.get("/edit", (req, res) => {
-//     console.log("Email route hit");
-//     sendEmail("juliusbornmuc@gmail.com", "Hello", "Urgent")
-//         .then(() => {
-//             console.log("Email send!");
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//         });
-// });
+app.post("/login", (req, res) => {
+    console.log("Login Post route hit", req.body);
+    db.getUserByEmail(req.body.email).then((response) => {
+        console.log(("Response from DB", response.rows[0]));
+
+        compare(req.body.password, response.rows[0].password)
+            .then((match) => {
+                if (match) {
+                    console.log("Match", match);
+                    req.session.userId = response.rows[0].id;
+                    res.json({ error: false });
+                } else {
+                    console.log("No Match");
+                    res.json({ error: true });
+                }
+            })
+            .catch((err) => {
+                console.log("Error in compare", err);
+            });
+    });
+});
+
+app.post("/password/reset/start", (req, res) => {
+    // this runs when the user enters their email in ResetPassword
+    /*
+        things to do here 
+        1. verify the email the user entered actually exists in users 
+        2. send the email to that user if their email is valid 
+            - we have to generate a secret code and send that secret code to the user 
+            - we're also going to have store the secret code somewhere 
+    */
+    // how to verify the email address?
+    // query the users table to see if the email exists in it
+
+    // secret code stuff :D
+    // this generates a random string of 6 characters
+    const secretCode = cryptoRandomString({
+        length: 6,
+    });
+
+    // we need to store the secret code somewhere
+    // we're going to store the secret code in a new table!
+    // insert the code and the user's email in our new table
+
+    // use sendEmail to send an email to this user!
+    // when calling sendEmail, remember to pass it the email of the recipient,
+    // secret code, and subject of email
+
+    // send back a response to the client (ResetPassword) indicating either
+    // 1. everything went according to plan
+    // 2. something broke along the way :(
+});
+
+app.post("/password/reset/verify", (req, res) => {
+    /*
+        big picture 
+        1. verify the code the user entered is correct 
+        2. take new password, hash it, and store it in users 
+    */
+    // verifying the code
+    // 1. go to reset_codes and retrieve the code stored there for the user
+    // we want to make sure the code is no more than 10 minutes old! We can use this query
+    /*
+        SELECT * FROM my_table
+        WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';
+    */
+    // if the code is expired - send back a message to React indicating that
+    // (send back some sort of failure/error message)
+    // if the code is NOT expired...
+    // check if the code we received from the user (in req.body) matches the code we received from the db
+    // if they do NOT match
+    // send back a response to React indicating failure/error/lack of success in some way
+    // React should allow the user to enter their code again in this case
+    // if they DO match
+    // hash the password, update users, and send back a success message to React
+});
+
+app.get("/profile/profile_pic", (req, res) => {
+    console.log("Get Profile profile_pic", req);
+    res.json({ answer: "yes" });
+});
 
 app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
