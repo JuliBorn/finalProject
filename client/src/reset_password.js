@@ -6,6 +6,9 @@ export default class ResetPassword extends React.Component {
         super(props);
         this.state = {
             renderView: 1,
+            email: "",
+            password: "",
+            code: "",
         };
     }
 
@@ -23,17 +26,34 @@ export default class ResetPassword extends React.Component {
             .then((response) => {
                 console.log("Response from Server", response);
                 if (response.data.success) {
-                    console.log("SUCCES");
+                    console.log("SUCCESS");
                     this.setState({ renderView: 2 });
                 }
             });
     }
 
+    postCode() {
+        console.log("Post Code clicked");
+
+        axios
+            .post("/password/reset/verify", {
+                password: this.state.password,
+                code: this.state.code,
+            })
+            .then((response) => {
+                console.log("Response from Server", response);
+                if (response.data.success) {
+                    console.log("SUCCESS");
+                    this.setState({ renderView: 3 });
+                }
+            });
+    }
     determineWhichViewToRender() {
         if (this.state.renderView === 1) {
             return (
                 <div>
                     <input
+                        type="email"
                         onChange={(e) => this.handleChange(e)}
                         name="email"
                         placeholder="eMail"
@@ -45,16 +65,20 @@ export default class ResetPassword extends React.Component {
             return (
                 <div>
                     <input
+                        type="password"
                         onChange={(e) => this.handleChange(e)}
                         name="password"
-                        placeholder="password"
+                        placeholder="New Password"
                     />
                     <input
+                        type="text"
                         onChange={(e) => this.handleChange(e)}
                         name="code"
-                        placeholder="code"
+                        placeholder="Code"
                     />
-                    <button onClick={() => this.postEmail()}></button>
+                    <button onClick={() => this.postCode()}>
+                        Change Password
+                    </button>
                 </div>
             );
         } else if (this.state.renderView === 3) {

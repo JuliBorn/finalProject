@@ -22,3 +22,9 @@ module.exports.storeResetCode = (reset_code, email) => {
     const params = [reset_code, email];
     return db.query(q, params);
 };
+
+module.exports.getResetCode = () => {
+    const q = `SELECT * FROM reset_codes
+    WHERE CURRENT_TIMESTAMP - timestamp < INTERVAL '10 minutes'`;
+    return db.query(q);
+};

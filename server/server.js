@@ -123,7 +123,7 @@ app.post("/password/reset/start", (req, res) => {
                 db.storeResetCode(secretCode, req.body.email)
                     .then((result) => {
                         console.log("Reset Code stored", result);
-                        const message = `Hello, `;
+                        const message = `Hello, your code is: ${secretCode}`;
                         sendEmail(
                             "opposite.fibre@spicedling.email",
                             message,
@@ -171,11 +171,36 @@ app.post("/password/reset/start", (req, res) => {
 });
 
 app.post("/password/reset/verify", (req, res) => {
+    console.log("Password reset verify: ", req.body);
+
     /*
         big picture 
         1. verify the code the user entered is correct 
         2. take new password, hash it, and store it in users 
     */
+
+    db.getResetCode()
+        .then((result) => {
+            console.log("Reset codes from DB: ", result.rows);
+            let resetCodes = result.rows.sort((a, b) => {
+                a.timestamp - b.timestamp;
+            });
+            const lastCode = resetCodes[resetCodes.length - 1];
+            console.log("Sortet Array", resetCodes);
+            console.log("last code", lastCode.code);
+            if (lastCode.code === req.body.code) {
+                console.log("Right Code!!!");
+                res.json({ success: true });
+            } else {
+                console.log("Codes dont match");
+                res.json({ error: true });
+            }
+        })
+        .catch((err) => {
+            console.log("Error with DB", err);
+            res.json({ error: true });
+        });
+
     // verifying the code
     // 1. go to reset_codes and retrieve the code stored there for the user
     // we want to make sure the code is no more than 10 minutes old! We can use this query
@@ -192,6 +217,7 @@ app.post("/password/reset/verify", (req, res) => {
     // React should allow the user to enter their code again in this case
     // if they DO match
     // hash the password, update users, and send back a success message to React
+    //
 });
 
 app.get("/profile/profile_pic", (req, res) => {
