@@ -40,3 +40,12 @@ module.exports.getProfileById = (userId) => {
     const params = [userId];
     return db.query(q, params);
 };
+
+module.exports.upsertProfilePicUrl = (profilePicUrl, userId) => {
+    const q = `UPDATE users 
+    SET profile_pic_url = $1
+    WHERE id = $2 
+    RETURNING profile_pic_url`;
+    const params = [profilePicUrl, userId];
+    return db.query(q, params);
+};

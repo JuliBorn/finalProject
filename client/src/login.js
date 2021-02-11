@@ -28,11 +28,11 @@ export default class Login extends Component {
                 .then((response) => {
                     console.log("Res from Server: ", response.data.error);
                     if (response.data.error) {
-                        this.state = {
+                        this.setState = {
                             dbError: true,
                         };
                     } else {
-                        this.state = {
+                        this.setState = {
                             dbError: false,
                         };
                         location.replace("/");

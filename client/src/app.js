@@ -15,24 +15,34 @@ export default class App extends Component {
         this.state = {
             uploaderVisible: false,
         };
+        this.toggleUploader = this.toggleUploader.bind(this);
+        this.setProfilePicUrl = this.setProfilePicUrl.bind(this);
     }
     componentDidMount() {
         console.log("Mounted");
 
         axios.get("/profile").then((response) => {
-            console.log("Data from GET profile ", response.data);
-        });
+            console.log("Data from GET profile ", response);
 
-        ///GET DATA FROM SERVER WITH AXIOS
-        this.setState({
-            first: "Julius",
-            last: "Born",
-            email: "juliusbornmuc@gmail.com",
+            this.setState({
+                first: response.data.first,
+                last: response.data.last,
+                email: response.data.email,
+                profilePicUrl: response.data.profile_pic_url,
+            });
         });
     }
     toggleUploader() {
         console.log("Click!");
-        //this.setState({ uploaderVisible: !this.uploaderVisible });
+        this.setState({ uploaderVisible: !this.state.uploaderVisible });
+    }
+
+    setProfilePicUrl(profilePicUrl) {
+        console.log("Setting state from uploader");
+        this.setState({
+            profilePicUrl: profilePicUrl,
+            // uploaderVisible: false,
+        });
     }
     render() {
         console.log("This App State: ", this.state);
@@ -44,15 +54,17 @@ export default class App extends Component {
             <>
                 <Header />
                 <ProfilePic
-                    image={this.state.imgulr}
                     first={this.state.first}
                     last={this.state.last}
+                    profilePicUrl={this.state.profilePicUrl}
                     toggleUploader={this.toggleUploader}
-                    onClick={() => this.toggleUploader()}
+                    // onClick={() => this.toggleUploader()}
                 />
                 {/* <Profile /> */}
                 <Logo />
-                <Uploader />
+                {this.state.uploaderVisible && (
+                    <Uploader setProfilePicUrl={this.setProfilePicUrl} />
+                )}
                 <Footer />
             </>
         );

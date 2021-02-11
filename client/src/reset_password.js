@@ -32,7 +32,13 @@ export default class ResetPassword extends React.Component {
                     if (response.data.success) {
                         console.log("SUCCESS");
                         this.setState({ renderView: 2 });
+                    } else {
+                        console.log("Error from Server");
+                        this.setState({ userError: true });
                     }
+                })
+                .catch((err) => {
+                    console.log("Error from Server", err);
                 });
         } else {
             this.setState({ userError: true });
@@ -65,7 +71,7 @@ export default class ResetPassword extends React.Component {
                         name="email"
                         placeholder="eMail"
                     />
-                    {this.state.userError && <p>All field required</p>}
+                    {this.state.userError && <p>Wrong Input</p>}
                     <button onClick={() => this.postEmail()}>Submit</button>
                 </div>
             );
@@ -78,6 +84,7 @@ export default class ResetPassword extends React.Component {
                         onChange={(e) => this.handleChange(e)}
                         name="password"
                         placeholder="New Password"
+                        key={1}
                     />
                     <input
                         type="text"

@@ -6,7 +6,10 @@ const cryptoRandomString = require("crypto-random-string");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 
+const { uploader } = require("./upload");
 const { sendEmail } = require("./ses");
+const awsUrl = require("./config");
+const s3 = require("./s3");
 
 const { compare, hash } = require("./bc.js");
 const db = require("./db");
@@ -43,19 +46,24 @@ app.use((req, res, next) => {
     next();
 });
 
+// app.use((req, res, next) => {
+//     if (!req.session.userId) {
+//         console.log("GET /welcome");
+//         res.redirect("/welcome");
+//     } else {
+//         console.log("Requested Url", req.url);
+//         if (req.url == "/profile") {
+//             next();
+//         } else {
+//             res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+//         }
+//     }
+// });
+
 app.get("/welcome", (req, res) => {
     if (req.session.userId) {
         console.log("GET /welcome");
         res.redirect("/");
-    } else {
-        res.sendFile(path.join(__dirname, "..", "client", "index.html"));
-    }
-});
-
-app.get("*", function (req, res) {
-    if (!req.session.userId) {
-        console.log("GET /welcome");
-        res.redirect("/welcome");
     } else {
         res.sendFile(path.join(__dirname, "..", "client", "index.html"));
     }
@@ -190,6 +198,8 @@ app.post("/password/reset/verify", (req, res) => {
             console.log("last code", lastCode.code);
             if (lastCode.code === req.body.code) {
                 console.log("Right Code!!!");
+                console.log("New Password", req.body.password);
+
                 hash(req.body.password).then((hashedPw) => {
                     console.log("Hashed PW: ", hashedPw);
                     db.updateUser(req.body.email, hashedPw)
@@ -230,18 +240,53 @@ app.post("/password/reset/verify", (req, res) => {
     //
 });
 
-app.get("/profile/", (req, res) => {
+app.get("/profile", (req, res) => {
     console.log("Get Profile", req);
     console.log("Get ID", req.session.userId);
-    db.getProfileById(req.session.userId)
+    db.getProfileById(req.session.userId.id)
         .then((response) => {
             console.log("Profile from DB", response.rows[0]);
-            res.json({ data: response.rows });
+            res.json(response.rows[0]);
         })
         .catch((err) => {
             console.log(err);
             res.json({ error: true });
         });
+});
+
+app.post(
+    "/profile/profile_pic/",
+    uploader.single("file"),
+    s3.upload,
+    (req, res) => {
+        console.log("upload complete");
+        console.log("Storing image for id: ", req.session.userId);
+
+        console.log("req.file: ", req.file);
+        const url = awsUrl.s3Url + req.file.filename;
+        console.log("URL: ", url);
+        db.upsertProfilePicUrl(url, req.session.userId.id)
+            .then((result) => {
+                console.log("Result from DB", result.rows);
+                res.json({ profilePicUrl: result.rows[0].profile_pic_url });
+            })
+            .catch((err) => {
+                console.log("Error in DB", err);
+                res.json({ error: true });
+            });
+        //console.log("req.body URL: ", req.body.profilePicUrl);
+    }
+);
+
+app.get("*", (req, res) => {
+    if (!req.session.userId) {
+        // if user not logged in redirect to welcome
+        res.redirect("/welcome");
+    } else {
+        // if user logged in send over the html
+        // once the client has the HTML start.js will render the <p>
+        res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+    }
 });
 
 app.listen(process.env.PORT || 3001, function () {
