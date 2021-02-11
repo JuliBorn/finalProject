@@ -190,7 +190,17 @@ app.post("/password/reset/verify", (req, res) => {
             console.log("last code", lastCode.code);
             if (lastCode.code === req.body.code) {
                 console.log("Right Code!!!");
-                res.json({ success: true });
+                hash(req.body.password).then((hashedPw) => {
+                    console.log("Hashed PW: ", hashedPw);
+                    db.updateUser(req.body.email, hashedPw)
+                        .then((result) => {
+                            console.log("Updated PW in DB", result);
+                            res.json({ success: true });
+                        })
+                        .catch((err) => {
+                            console.log("Error updating DB", err);
+                        });
+                });
             } else {
                 console.log("Codes dont match");
                 res.json({ error: true });
@@ -220,9 +230,18 @@ app.post("/password/reset/verify", (req, res) => {
     //
 });
 
-app.get("/profile/profile_pic", (req, res) => {
-    console.log("Get Profile profile_pic", req);
-    res.json({ answer: "yes" });
+app.get("/profile/", (req, res) => {
+    console.log("Get Profile", req);
+    console.log("Get ID", req.session.userId);
+    db.getProfileById(req.session.userId)
+        .then((response) => {
+            console.log("Profile from DB", response.rows[0]);
+            res.json({ data: response.rows });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.json({ error: true });
+        });
 });
 
 app.listen(process.env.PORT || 3001, function () {

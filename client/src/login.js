@@ -35,6 +35,7 @@ export default class Login extends Component {
                         this.state = {
                             dbError: false,
                         };
+                        location.replace("/");
                     }
                 })
                 .catch((err) => {

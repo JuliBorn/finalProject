@@ -11,6 +11,12 @@ module.exports.addUser = (first, last, email, password) => {
     return db.query(q, params);
 };
 
+module.exports.updateUser = (email, password) => {
+    const q = `UPDATE users SET password= $2 WHERE email = $1`;
+    const params = [email, password];
+    return db.query(q, params);
+};
+
 module.exports.getUserByEmail = (email) => {
     const q = `SELECT * FROM users WHERE email = $1`;
     const params = [email];
@@ -27,4 +33,10 @@ module.exports.getResetCode = () => {
     const q = `SELECT * FROM reset_codes
     WHERE CURRENT_TIMESTAMP - timestamp < INTERVAL '10 minutes'`;
     return db.query(q);
+};
+
+module.exports.getProfileById = (userId) => {
+    const q = `SELECT * FROM users WHERE id = $1`;
+    const params = [userId];
+    return db.query(q, params);
 };

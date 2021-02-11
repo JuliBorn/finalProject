@@ -1,11 +1,14 @@
 import axios from "./axios";
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 export default class ResetPassword extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             renderView: 1,
+            userError: false,
             email: "",
             password: "",
             code: "",
@@ -14,22 +17,26 @@ export default class ResetPassword extends React.Component {
 
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
+        console.log(this.state);
     }
 
     postEmail() {
         console.log("Email clicked");
-
-        axios
-            .post("/password/reset/start", {
-                email: this.state.email,
-            })
-            .then((response) => {
-                console.log("Response from Server", response);
-                if (response.data.success) {
-                    console.log("SUCCESS");
-                    this.setState({ renderView: 2 });
-                }
-            });
+        if (this.state.email) {
+            axios
+                .post("/password/reset/start", {
+                    email: this.state.email,
+                })
+                .then((response) => {
+                    console.log("Response from Server", response);
+                    if (response.data.success) {
+                        console.log("SUCCESS");
+                        this.setState({ renderView: 2 });
+                    }
+                });
+        } else {
+            this.setState({ userError: true });
+        }
     }
 
     postCode() {
@@ -58,10 +65,12 @@ export default class ResetPassword extends React.Component {
                         name="email"
                         placeholder="eMail"
                     />
+                    {this.state.userError && <p>All field required</p>}
                     <button onClick={() => this.postEmail()}>Submit</button>
                 </div>
             );
         } else if (this.state.renderView === 2) {
+            console.log("State in Render View 2", this.state);
             return (
                 <div>
                     <input
@@ -76,6 +85,7 @@ export default class ResetPassword extends React.Component {
                         name="code"
                         placeholder="Code"
                     />
+                    {this.state.userError && <p>All field required</p>}
                     <button onClick={() => this.postCode()}>
                         Change Password
                     </button>
@@ -85,6 +95,7 @@ export default class ResetPassword extends React.Component {
             return (
                 <div>
                     <h1>success</h1>
+                    <Link to="/login">Login</Link>
                 </div>
             );
         }
