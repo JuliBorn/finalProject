@@ -1,8 +1,12 @@
 import axios from "./axios";
 
 import { Component } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 
 import ProfilePic from "./profile_pic";
+import Profile from "./profile";
+import OtherProfile from "./other_profile";
+
 import Uploader from "./uploader";
 import Logo from "./logo";
 
@@ -17,18 +21,20 @@ export default class App extends Component {
         };
         this.toggleUploader = this.toggleUploader.bind(this);
         this.setProfilePicUrl = this.setProfilePicUrl.bind(this);
+        this.setBio = this.setBio.bind(this);
     }
     componentDidMount() {
-        console.log("Mounted");
+        //console.log("Mounted");
 
         axios.get("/profile").then((response) => {
-            console.log("Data from GET profile ", response);
+            //console.log("Data from GET profile ", response.data);
 
             this.setState({
                 first: response.data.first,
                 last: response.data.last,
                 email: response.data.email,
                 profilePicUrl: response.data.profile_pic_url,
+                bio: response.data.bio,
             });
         });
     }
@@ -44,28 +50,88 @@ export default class App extends Component {
             // uploaderVisible: false,
         });
     }
+
+    setBio(bio) {
+        this.setState({ bio: bio });
+    }
+
+    logout() {
+        //req.session = null;
+        axios.get("/logout").then((response) => {
+            console.log("Logout Response: ", response);
+            location.replace("/welcome");
+        });
+    }
     render() {
         console.log("This App State: ", this.state);
-        // if (!this.state.id) {
-        //     return null;
-        //     //Adding spinner div?
-        // }
+        if (!this.state.first) {
+            return <div className="loader">Loading...</div>;
+        }
         return (
             <>
-                <Header />
-                <ProfilePic
-                    first={this.state.first}
-                    last={this.state.last}
-                    profilePicUrl={this.state.profilePicUrl}
-                    toggleUploader={this.toggleUploader}
-                    // onClick={() => this.toggleUploader()}
-                />
-                {/* <Profile /> */}
-                <Logo />
-                {this.state.uploaderVisible && (
-                    <Uploader setProfilePicUrl={this.setProfilePicUrl} />
-                )}
-                <Footer />
+                <BrowserRouter>
+                    <Header />
+                    <div className="body">
+                        <div className="body_container">
+                            <main className="body_content">
+                                <Route
+                                    exact
+                                    path="/"
+                                    render={() => {
+                                        return (
+                                            <Profile
+                                                first={this.state.first}
+                                                last={this.state.last}
+                                                profilePicUrl={
+                                                    this.state.profilePicUrl
+                                                }
+                                                bio={this.state.bio}
+                                                setBio={this.setBio}
+                                            />
+                                        );
+                                    }}
+                                />
+
+                                <Route
+                                    path="/user/:id"
+                                    render={(props) => {
+                                        return (
+                                            <OtherProfile
+                                                key={props.match.url}
+                                                match={props.match}
+                                                history={props.history}
+                                            />
+                                        );
+                                    }}
+                                />
+
+                                <Logo />
+                            </main>
+                            <aside className="body_left">
+                                <p>LEFT</p>
+                            </aside>
+                            <aside className="body_right">
+                                <div className="profile_pic_container">
+                                    <ProfilePic
+                                        first={this.state.first}
+                                        last={this.state.last}
+                                        profilePicUrl={this.state.profilePicUrl}
+                                        toggleUploader={this.toggleUploader}
+                                        // onClick={() => this.toggleUploader()}
+                                    />
+                                </div>
+                                {this.state.uploaderVisible && (
+                                    <Uploader
+                                        setProfilePicUrl={this.setProfilePicUrl}
+                                    />
+                                )}
+                            </aside>
+                        </div>
+                    </div>
+
+                    <button onClick={() => this.logout()}>Logout</button>
+                    <Footer />
+                </BrowserRouter>
             </>
         );
     }

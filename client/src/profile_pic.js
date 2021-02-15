@@ -1,7 +1,7 @@
 //import BioEditor from "./bio_editor";
 
 export default function ProfilePic(props) {
-    console.log("props: ", props);
+    //console.log("props in profile_pic: ", props);
     let { first, last, profilePicUrl, toggleUploader } = props;
     return (
         <>
@@ -9,9 +9,8 @@ export default function ProfilePic(props) {
                 className="profile_pic"
                 src={props.profilePicUrl || "/default.svg"}
                 onClick={toggleUploader}
+                alt={`${first} ${last}`}
             ></img>
-            <p>{first}</p>
-            <p>{last}</p>
         </>
     );
 }
