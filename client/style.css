@@ -208,6 +208,15 @@ input {
     margin: auto;
 }
 
+.user_card {
+    border: 2px solid var(--light);
+    margin-left: 10px;
+    
+    /* background-color: var(--sec); */
+}
+
+/* ////////////////////////////////////////////////////////////////////////////////////////// */
+
 .loader {
     margin: 100px auto;
     font-size: 25px;

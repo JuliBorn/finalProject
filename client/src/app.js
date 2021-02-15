@@ -6,6 +6,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import ProfilePic from "./profile_pic";
 import Profile from "./profile";
 import OtherProfile from "./other_profile";
+import FindUsers from "./find_users";
 
 import Uploader from "./uploader";
 import Logo from "./logo";
@@ -105,7 +106,18 @@ export default class App extends Component {
                                     }}
                                 />
 
-                                <Logo />
+                                <Route
+                                    path="/users"
+                                    render={(props) => {
+                                        return (
+                                            <>
+                                                <FindUsers />
+                                            </>
+                                        );
+                                    }}
+                                />
+
+                                {/* <Logo /> */}
                             </main>
                             <aside className="body_left">
                                 <p>LEFT</p>

@@ -64,20 +64,6 @@ app.get("/profile", (req, res) => {
         });
 });
 
-app.get("/profile/:id", (req, res) => {
-    console.log("Get Profile", req);
-    console.log("Get ID", req.session.userId);
-    db.getProfileById(req.session.userId)
-        .then((response) => {
-            console.log("Profile from DB", response.rows[0]);
-            res.json(response.rows[0]);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.json({ error: true });
-        });
-});
-
 app.post(
     "/profile/profile_pic/",
     uploader.single("file"),
@@ -113,6 +99,46 @@ app.post("/profile/bio/", (req, res) => {
         })
         .catch((err) => {
             console.log("Error adding Bio to DB", err);
+        });
+});
+
+app.get("/api/profile/:id", (req, res) => {
+    console.log("Get Profile", req.params.id);
+
+    db.getProfileById(req.params.id)
+        .then((response) => {
+            console.log("Profile from DB", response.rows[0]);
+            res.json(response.rows[0]);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.json({ error: true });
+        });
+});
+
+app.get("/api/users", (req, res) => {
+    console.log("get Users route hit", req.query);
+
+    db.getUsersByName(req.query.input)
+        .then((result) => {
+            //console.log("Result from DB inc Search: ", result.rows);
+            res.json(result.rows);
+        })
+        .catch((err) => {
+            console.log("Error inc Search", err);
+        });
+});
+
+app.get("/api/users/latest", (req, res) => {
+    console.log("get Users latest route hit");
+
+    db.getUsersLatest()
+        .then((result) => {
+            //console.log("Result from DB inc Search: ", result.rows);
+            res.json(result.rows);
+        })
+        .catch((err) => {
+            console.log("Error inc Search", err);
         });
 });
 
