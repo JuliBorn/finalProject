@@ -69,3 +69,11 @@ module.exports.getUsersLatest = () => {
     const q = `SELECT * FROM users ORDER BY id DESC LIMIT 3;`;
     return db.query(q);
 };
+
+module.exports.getFriendshipStatus = (viewerId, viewedId) => {
+    const q = `SELECT * FROM friendships
+            WHERE (recipient_id = $1 AND sender_id = $2)
+            OR (recipient_id = $2 AND sender_id = $1);`;
+    const params = [viewedId, viewerId];
+    return db.query(q, params);
+};

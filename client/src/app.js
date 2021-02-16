@@ -2,6 +2,7 @@ import axios from "./axios";
 
 import { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import ProfilePic from "./profile_pic";
 import Profile from "./profile";
@@ -121,6 +122,7 @@ export default class App extends Component {
                             </main>
                             <aside className="body_left">
                                 <p>LEFT</p>
+                                <Link to="/users">Find Users</Link>
                             </aside>
                             <aside className="body_right">
                                 <div className="profile_pic_container">

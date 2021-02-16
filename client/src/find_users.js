@@ -15,6 +15,7 @@ export default function FindUsers() {
         axios.get(`/api/users?input=${user}`).then(({ data }) => {
             console.log("data: ", data);
             if (!abort) {
+                
                 setUsers(data);
             }
         });
@@ -33,30 +34,7 @@ export default function FindUsers() {
         });
     }, []);
 
-    // example #2: with async/await
-    // useEffect(() => {
-    //     let abort = false;
-    //     // then this stuff runs SECOND
-    //     // (async () => {
-    //     //     try {
-    //     //         const { data } = await axios.get(
-    //     //             `https://spicedworld.herokuapp.com/?q=${country}`
-    //     //         );
-    //     //         if (!abort) {
-    //     //             setCountries(data);
-    //     //         }
-    //     //     } catch (err) {
-    //     //         console.log(err);
-    //     //     }
-    //     // })();
 
-    //     // cleanup function
-    //     // runs before every re-render
-    //     return () => {
-    //         console.log("country in returned function: ", user);
-    //         abort = true;
-    //     };
-    // }, [user]);
 
     return (
         <div>

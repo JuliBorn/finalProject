@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
 exports.app = app;
-const router = require("./auth_routes").router;
+
+const auth_router = require("./auth_routes").router;
+const profile_router = require("./profile_routes").router;
 
 const compression = require("compression");
 const path = require("path");
@@ -48,7 +50,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(router);
+app.use(auth_router);
+app.use(profile_router);
 
 app.get("/profile", (req, res) => {
     console.log("Get Profile", req);
@@ -88,34 +91,6 @@ app.post(
     }
 );
 
-app.post("/profile/bio/", (req, res) => {
-    console.log("Bio Route hit");
-    console.log("Storing bio for id: ", req.session.userId);
-    console.log("Data from Client: Bio", req.body);
-    db.addBio(req.body.bio, req.session.userId)
-        .then((result) => {
-            console.log(result.rows[0]);
-            res.json(result.rows[0]);
-        })
-        .catch((err) => {
-            console.log("Error adding Bio to DB", err);
-        });
-});
-
-app.get("/api/profile/:id", (req, res) => {
-    console.log("Get Profile", req.params.id);
-
-    db.getProfileById(req.params.id)
-        .then((response) => {
-            console.log("Profile from DB", response.rows[0]);
-            res.json(response.rows[0]);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.json({ error: true });
-        });
-});
-
 app.get("/api/users", (req, res) => {
     console.log("get Users route hit", req.query);
 
@@ -140,6 +115,18 @@ app.get("/api/users/latest", (req, res) => {
         .catch((err) => {
             console.log("Error inc Search", err);
         });
+});
+
+app.get("/api/users/friendships", (req, res) => {
+    const viewedId = req.query.viewedId;
+    const viewerId = req.session.userId;
+
+    console.log("get Users friendships route hit, viewed", viewedId);
+    console.log("get Users friendships route hit, viewer", viewerId);
+
+    db.getFriendshipStatus(viewedId, viewerId).then((result) => {
+        console.log("Result from DB Friendship Status: ", result.rows);
+    });
 });
 
 app.get("*", (req, res) => {
