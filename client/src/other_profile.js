@@ -44,7 +44,10 @@ export default class OtherProfile extends Component {
                     src={this.state.profilePicUrl}
                     alt={`${this.state.first} ${this.state.last}`}
                 />
-                <FriendButton viewedId={this.props.match.params.id} />
+                <FriendButton
+                    viewedId={this.props.match.params.id}
+                    viewerId={this.props.id}
+                />
             </>
         );
     }

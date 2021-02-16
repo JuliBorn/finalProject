@@ -32,6 +32,7 @@ export default class App extends Component {
             //console.log("Data from GET profile ", response.data);
 
             this.setState({
+                id: response.data.id,
                 first: response.data.first,
                 last: response.data.last,
                 email: response.data.email,
@@ -102,6 +103,7 @@ export default class App extends Component {
                                                 key={props.match.url}
                                                 match={props.match}
                                                 history={props.history}
+                                                id={this.state.id}
                                             />
                                         );
                                     }}

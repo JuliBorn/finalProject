@@ -125,8 +125,64 @@ app.get("/api/users/friendships", (req, res) => {
     console.log("get Users friendships route hit, viewer", viewerId);
 
     db.getFriendshipStatus(viewedId, viewerId).then((result) => {
-        console.log("Result from DB Friendship Status: ", result.rows);
+        console.log("Result from DB Friendship Status: ", result.rows[0]);
+        res.json(result.rows[0]);
     });
+});
+
+app.post("/api/users/friendships/requestFriend", (req, res) => {
+    console.log("postUsers friendships ", req.body);
+    const viewedId = req.body.viewedId;
+    const viewerId = req.session.userId;
+
+    console.log("post Users friendships route hit, viewed", viewedId);
+    console.log("post Users friendships route hit, viewer", viewerId);
+
+    db.requestFriendship(viewedId, viewerId)
+        .then((result) => {
+            console.log(result);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
+    // db.getFriendshipStatus(viewedId, viewerId).then((result) => {
+    //     console.log("Result from DB Friendship Status: ", result.rows);
+    // });
+});
+
+app.post("/api/users/friendships/acceptRequest", (req, res) => {
+    console.log("accept friendships ", req.body);
+    const viewedId = req.body.viewedId;
+    const viewerId = req.session.userId;
+
+    console.log("accept friendships route hit, viewed", viewedId);
+    console.log("accept friendships route hit, viewer", viewerId);
+
+    db.acceptFriendship(viewerId, viewedId)
+        .then((result) => {
+            console.log("Result from DB", result);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.post("/api/users/friendships/endFriendship", (req, res) => {
+    console.log("accept friendships ", req.body);
+    const viewedId = req.body.viewedId;
+    const viewerId = req.session.userId;
+
+    console.log("accept friendships route hit, viewed", viewedId);
+    console.log("accept friendships route hit, viewer", viewerId);
+
+    db.endFriendship(viewerId, viewedId)
+        .then((result) => {
+            console.log("Result from DB", result);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 });
 
 app.get("*", (req, res) => {
