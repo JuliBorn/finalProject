@@ -15,6 +15,7 @@ export default function FriendButton(props) {
             .post("/api/users/friendships/requestFriend", data)
             .then((response) => {
                 console.log("Friendship request made", response);
+                setFriendshipStatus("pending_request");
             })
             .catch((err) => {
                 console.log(err);
@@ -28,6 +29,7 @@ export default function FriendButton(props) {
             .post("/api/users/friendships/endFriendship", data)
             .then((response) => {
                 console.log("Response", response);
+                setFriendshipStatus("noRequest");
             })
             .catch((err) => {
                 console.log(err);
@@ -42,6 +44,7 @@ export default function FriendButton(props) {
             .post("/api/users/friendships/acceptRequest", data)
             .then((response) => {
                 console.log("Response", response);
+                setFriendshipStatus("accepted");
             })
             .catch((err) => {
                 console.log(err);
@@ -56,6 +59,7 @@ export default function FriendButton(props) {
             .post("/api/users/friendships/endFriendship", data)
             .then((response) => {
                 console.log("Response", response);
+                setFriendshipStatus("noRequest");
             })
             .catch((err) => {
                 console.log(err);
@@ -99,42 +103,50 @@ export default function FriendButton(props) {
                         }
                     }
                 } else {
-                    setFriendshipStatus("noRequest", err);
+                    setFriendshipStatus("noRequest");
                     console.log("Friendshipstatus: ", friendshipStatus);
                 }
             })
             .catch((err) => {
-                setFriendshipStatus("noRequest", err);
-                console.log("Friendshipstatus: ", friendshipStatus);
+                setFriendshipStatus("noRequest");
+                console.log("Friendshipstatus: ", friendshipStatus, err);
             });
-    });
+    }, []);
 
     ////RENDER STUFF
     if (friendshipStatus === "accepted") {
         return (
             <div>
-                <button onClick={endFriendship}>End friendship</button>
+                <button onClick={(e) => endFriendship(e)}>
+                    End friendship
+                </button>
                 <p>{friendshipStatus}</p>
             </div>
         );
     } else if (friendshipStatus === "pending_request") {
         return (
             <div>
-                <button onClick={cancelRequest}>Cancel Friend Request</button>
+                <button onClick={(e) => cancelRequest(e)}>
+                    Cancel Friend Request
+                </button>
                 <p>{friendshipStatus}</p>
             </div>
         );
     } else if (friendshipStatus === "request_made") {
         return (
             <div>
-                <button onClick={acceptRequest}>Accept Friend Request</button>
+                <button onClick={(e) => acceptRequest(e)}>
+                    Accept Friend Request
+                </button>
                 <p>{friendshipStatus}</p>
             </div>
         );
     } else {
         return (
             <div>
-                <button onClick={requestFriendship}>Send Friend Request</button>
+                <button onClick={(e) => requestFriendship(e)}>
+                    Send Friend Request
+                </button>
                 <p>{friendshipStatus}</p>
             </div>
         );
