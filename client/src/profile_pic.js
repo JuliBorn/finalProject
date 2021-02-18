@@ -2,7 +2,7 @@
 
 export default function ProfilePic(props) {
     //console.log("props in profile_pic: ", props);
-    let { first, last, profilePicUrl, toggleUploader } = props;
+    let { first, last, id, profilePicUrl, toggleUploader, email } = props;
     return (
         <>
             <img
@@ -11,6 +11,8 @@ export default function ProfilePic(props) {
                 onClick={toggleUploader}
                 alt={`${first} ${last}`}
             ></img>
+            <p>{email}</p>
+            <p>ID: {id}</p>
         </>
     );
 }

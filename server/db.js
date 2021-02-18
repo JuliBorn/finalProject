@@ -93,10 +93,13 @@ module.exports.acceptFriendship = (viewerId, viewedId) => {
     return db.query(q, params);
 };
 
-module.exports.endFriendship = (viewerId, viewedId) => {
-    const q = `DELETE FROM friendships 
-            WHERE (recipient_id = $1 AND sender_id = $2)
-            OR (recipient_id = $2 AND sender_id = $1);`;
-    const params = [viewerId, viewedId];
+module.exports.getFriends = (viewerId) => {
+    const q = `SELECT users.id, first, last, profile_pic_url, accepted
+    FROM friendships
+    JOIN users
+    ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
+    OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+    OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)`;
+    const params = [viewerId];
     return db.query(q, params);
 };

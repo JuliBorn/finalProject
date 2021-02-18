@@ -8,6 +8,8 @@ import ProfilePic from "./profile_pic";
 import Profile from "./profile";
 import OtherProfile from "./other_profile";
 import FindUsers from "./find_users";
+import Friends from "./friends";
+import { reducer } from "./reducer";
 
 import Uploader from "./uploader";
 import Logo from "./logo";
@@ -120,19 +122,34 @@ export default class App extends Component {
                                     }}
                                 />
 
+                                <Route
+                                    path="/friends"
+                                    render={(props) => {
+                                        return (
+                                            <>
+                                                <Friends />
+                                            </>
+                                        );
+                                    }}
+                                />
+
                                 {/* <Logo /> */}
                             </main>
                             <aside className="body_left">
                                 <p>LEFT</p>
                                 <Link to="/users">Find Users</Link>
+                                <Link to="/friends">Friends</Link>
                             </aside>
                             <aside className="body_right">
                                 <div className="profile_pic_container">
                                     <ProfilePic
                                         first={this.state.first}
                                         last={this.state.last}
+                                        email={this.state.email}
+                                        id={this.state.id}
                                         profilePicUrl={this.state.profilePicUrl}
                                         toggleUploader={this.toggleUploader}
+
                                         // onClick={() => this.toggleUploader()}
                                     />
                                 </div>

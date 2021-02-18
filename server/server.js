@@ -145,10 +145,6 @@ app.post("/api/users/friendships/requestFriend", (req, res) => {
         .catch((err) => {
             console.log(err);
         });
-
-    // db.getFriendshipStatus(viewedId, viewerId).then((result) => {
-    //     console.log("Result from DB Friendship Status: ", result.rows);
-    // });
 });
 
 app.post("/api/users/friendships/acceptRequest", (req, res) => {
@@ -179,6 +175,23 @@ app.post("/api/users/friendships/endFriendship", (req, res) => {
     db.endFriendship(viewerId, viewedId)
         .then((result) => {
             console.log("Result from DB", result);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.get("/api/users/friends", (req, res) => {
+    console.log("Get Friends Route hit", req.body);
+
+    const viewerId = req.session.userId;
+
+    console.log("accept friendships route hit, viewer", viewerId);
+
+    db.getFriends(viewerId)
+        .then((result) => {
+            console.log("Result from DB Friends", result.rows);
+            res.json(result.rows);
         })
         .catch((err) => {
             console.log(err);
