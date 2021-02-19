@@ -54,15 +54,15 @@ app.use(auth_router);
 app.use(profile_router);
 
 app.get("/profile", (req, res) => {
-    console.log("Get Profile", req);
-    console.log("Get ID", req.session.userId);
+    //console.log("Get Profile", req);
+    //console.log("Get ID", req.session.userId);
     db.getProfileById(req.session.userId)
         .then((response) => {
-            console.log("Profile from DB", response.rows[0]);
+            //console.log("Profile from DB", response.rows[0]);
             res.json(response.rows[0]);
         })
         .catch((err) => {
-            console.log(err);
+            //console.log(err);
             res.json({ error: true });
         });
 });
@@ -72,15 +72,15 @@ app.post(
     uploader.single("file"),
     s3.upload,
     (req, res) => {
-        console.log("upload complete");
-        console.log("Storing image for id: ", req.session.userId);
+        //console.log("upload complete");
+        //console.log("Storing image for id: ", req.session.userId);
 
-        console.log("req.file: ", req.file);
+        //console.log("req.file: ", req.file);
         const url = awsUrl.s3Url + req.file.filename;
-        console.log("URL: ", url);
+        //console.log("URL: ", url);
         db.upsertProfilePicUrl(url, req.session.userId)
             .then((result) => {
-                console.log("Result from DB", result.rows);
+                //console.log("Result from DB", result.rows);
                 res.json({ profilePicUrl: result.rows[0].profile_pic_url });
             })
             .catch((err) => {
@@ -92,7 +92,7 @@ app.post(
 );
 
 app.get("/api/users", (req, res) => {
-    console.log("get Users route hit", req.query);
+    //console.log("get Users route hit", req.query);
 
     db.getUsersByName(req.query.input)
         .then((result) => {
@@ -105,7 +105,7 @@ app.get("/api/users", (req, res) => {
 });
 
 app.get("/api/users/latest", (req, res) => {
-    console.log("get Users latest route hit");
+    //console.log("get Users latest route hit");
 
     db.getUsersLatest()
         .then((result) => {
@@ -121,11 +121,11 @@ app.get("/api/users/friendships", (req, res) => {
     const viewedId = req.query.viewedId;
     const viewerId = req.session.userId;
 
-    console.log("get Users friendships route hit, viewed", viewedId);
-    console.log("get Users friendships route hit, viewer", viewerId);
+    //console.log("get Users friendships route hit, viewed", viewedId);
+    //console.log("get Users friendships route hit, viewer", viewerId);
 
     db.getFriendshipStatus(viewedId, viewerId).then((result) => {
-        console.log("Result from DB Friendship Status: ", result.rows[0]);
+        //console.log("Result from DB Friendship Status: ", result.rows[0]);
         res.json(result.rows[0]);
     });
 });
@@ -135,12 +135,12 @@ app.post("/api/users/friendships/requestFriend", (req, res) => {
     const viewedId = req.body.viewedId;
     const viewerId = req.session.userId;
 
-    console.log("post Users friendships route hit, viewed", viewedId);
-    console.log("post Users friendships route hit, viewer", viewerId);
+    //console.log("post Users friendships route hit, viewed", viewedId);
+    //console.log("post Users friendships route hit, viewer", viewerId);
 
     db.requestFriendship(viewedId, viewerId)
         .then((result) => {
-            console.log(result);
+            //console.log(result);
         })
         .catch((err) => {
             console.log(err);
@@ -148,16 +148,16 @@ app.post("/api/users/friendships/requestFriend", (req, res) => {
 });
 
 app.post("/api/users/friendships/acceptRequest", (req, res) => {
-    console.log("accept friendships ", req.body);
+    //console.log("accept friendships ", req.body);
     const viewedId = req.body.viewedId;
     const viewerId = req.session.userId;
 
-    console.log("accept friendships route hit, viewed", viewedId);
-    console.log("accept friendships route hit, viewer", viewerId);
+    //console.log("accept friendships route hit, viewed", viewedId);
+    //console.log("accept friendships route hit, viewer", viewerId);
 
     db.acceptFriendship(viewerId, viewedId)
         .then((result) => {
-            console.log("Result from DB", result);
+            //console.log("Result from DB", result);
         })
         .catch((err) => {
             console.log(err);
@@ -165,16 +165,16 @@ app.post("/api/users/friendships/acceptRequest", (req, res) => {
 });
 
 app.post("/api/users/friendships/endFriendship", (req, res) => {
-    console.log("accept friendships ", req.body);
+    //console.log("accept friendships ", req.body);
     const viewedId = req.body.viewedId;
     const viewerId = req.session.userId;
 
-    console.log("accept friendships route hit, viewed", viewedId);
-    console.log("accept friendships route hit, viewer", viewerId);
+    //console.log("accept friendships route hit, viewed", viewedId);
+    //console.log("accept friendships route hit, viewer", viewerId);
 
     db.endFriendship(viewerId, viewedId)
         .then((result) => {
-            console.log("Result from DB", result);
+            //console.log("Result from DB", result);
         })
         .catch((err) => {
             console.log(err);
@@ -182,11 +182,11 @@ app.post("/api/users/friendships/endFriendship", (req, res) => {
 });
 
 app.get("/api/users/friends", (req, res) => {
-    console.log("Get Friends Route hit", req.body);
+    //console.log("Get Friends Route hit", req.body);
 
     const viewerId = req.session.userId;
 
-    console.log("accept friendships route hit, viewer", viewerId);
+    console.log("get friends, viewer", viewerId);
 
     db.getFriends(viewerId)
         .then((result) => {

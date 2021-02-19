@@ -44,12 +44,12 @@ export default class App extends Component {
         });
     }
     toggleUploader() {
-        console.log("Click!");
+        //console.log("Click!");
         this.setState({ uploaderVisible: !this.state.uploaderVisible });
     }
 
     setProfilePicUrl(profilePicUrl) {
-        console.log("Setting state from uploader");
+        //console.log("Setting state from uploader");
         this.setState({
             profilePicUrl: profilePicUrl,
             // uploaderVisible: false,
@@ -63,12 +63,12 @@ export default class App extends Component {
     logout() {
         //req.session = null;
         axios.get("/logout").then((response) => {
-            console.log("Logout Response: ", response);
+            //console.log("Logout Response: ", response);
             location.replace("/welcome");
         });
     }
     render() {
-        console.log("This App State: ", this.state);
+        //console.log("This App State: ", this.state);
         if (!this.state.first) {
             return <div className="loader">Loading...</div>;
         }

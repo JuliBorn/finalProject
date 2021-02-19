@@ -6,19 +6,23 @@ import { useDispatch, useSelector } from "react-redux";
 import getFriends from "./actions";
 
 export default function Friends() {
-    //const [friendList, setfriendList] = useState([]);
-
     const dispatch = useDispatch();
 
-    const friendList = useSelector((state) => {
-        return state;
-    });
-
-    console.log("Redux State Friendlist", friendList);
+    // console.log("State: ", state);
+    const friends = useSelector(
+        (state) =>
+            state.friendsList &&
+            state.friendsList.filter((user) => user.accepted)
+    );
 
     useEffect(() => {
         dispatch(getFriends());
     }, []);
+
+    // console.log("Friendtotal: ", users);
+    // if (!friendList) {
+    //     return null;
+    // }
 
     return (
         <>

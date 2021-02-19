@@ -5,7 +5,7 @@ import axios from "./axios";
 //     return { type: "UPDATE_STATE_SOMEHOW", data: data.userId };
 // }
 
-export default async function getFriends(userId) {
+export default async function getFriends() {
     const data = await axios.get("/api/users/friends");
     console.log("action get friends", data.data);
     return { type: "GET_FRIENDS", friendList: data.data };
