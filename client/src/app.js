@@ -137,8 +137,13 @@ export default class App extends Component {
                             </main>
                             <aside className="body_left">
                                 <p>LEFT</p>
-                                <Link to="/users">Find Users</Link>
-                                <Link to="/friends">Friends</Link>
+                                <Link to="/users" className="side_bar_text">
+                                    Find Users
+                                </Link>
+                                <br></br>
+                                <Link to="/friends" className="side_bar_text">
+                                    Friends
+                                </Link>
                             </aside>
                             <aside className="body_right">
                                 <div className="profile_pic_container">
@@ -152,6 +157,18 @@ export default class App extends Component {
 
                                         // onClick={() => this.toggleUploader()}
                                     />
+                                    <p className="side_bar_text">
+                                        ID: {this.state.id}
+                                    </p>
+                                    <p className="side_bar_text">
+                                        {this.state.first}
+                                    </p>
+                                    <p className="side_bar_text">
+                                        {this.state.last}
+                                    </p>
+                                    <p className="side_bar_text">
+                                        {this.state.email}
+                                    </p>
                                 </div>
                                 {this.state.uploaderVisible && (
                                     <Uploader

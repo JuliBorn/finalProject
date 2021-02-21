@@ -104,3 +104,11 @@ module.exports.getFriends = (viewerId) => {
     const params = [viewerId];
     return db.query(q, params);
 };
+
+module.exports.endFriendship = (viewerId, viewedId) => {
+    const q = `DELETE FROM friendships 
+            WHERE (recipient_id = $1 AND sender_id = $2)
+            OR (recipient_id = $2 AND sender_id = $1)`;
+    const params = [viewerId, viewedId];
+    return db.query(q, params);
+};

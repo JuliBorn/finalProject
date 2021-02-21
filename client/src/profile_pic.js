@@ -11,8 +11,6 @@ export default function ProfilePic(props) {
                 onClick={toggleUploader}
                 alt={`${first} ${last}`}
             ></img>
-            <p>{email}</p>
-            <p>ID: {id}</p>
         </>
     );
 }

@@ -15,7 +15,6 @@ export default function FindUsers() {
         axios.get(`/api/users?input=${user}`).then(({ data }) => {
             console.log("data: ", data);
             if (!abort) {
-                
                 setUsers(data);
             }
         });
@@ -34,8 +33,6 @@ export default function FindUsers() {
         });
     }, []);
 
-
-
     return (
         <div>
             <h1>User</h1>
@@ -50,7 +47,7 @@ export default function FindUsers() {
                 return (
                     <>
                         <div key={index} className="user_card">
-                            <p key={index}>{elem.first}</p>
+                            <a href={`/user/${elem.id}`}>{elem.first}</a>
                         </div>
                     </>
                 );
