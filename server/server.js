@@ -241,23 +241,26 @@ server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
 
-// io.on("connection", (socket) => {
-//     const { userId } = socket.request.session;
-//     if (!userId) {
-//         return socket.disconnect(true);
-//     }
-//     console.log("connected", userId);
-// });
+io.on("connection", (socket) => {});
 
 io.on("connection", function (socket) {
     console.log(`socket with the id ${socket.id} is now connected`);
+
+    const { userId } = socket.request.session;
+    if (!userId) {
+        return socket.disconnect(true);
+    }
+    console.log("connected", userId);
 
     socket.on("disconnect", function () {
         console.log(`socket with the id ${socket.id} is now disconnected`);
     });
 
-    socket.on("thanks", function (data) {
+    socket.on("sendMessage", function (data) {
         console.log(data);
+        db.addChatMessage(data, userId).then((result) => {
+            console.log("Result adding Chat to DB");
+        });
     });
 
     socket.emit("welcome", {

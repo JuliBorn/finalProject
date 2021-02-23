@@ -1,14 +1,33 @@
 // import axios from "./axios";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { chatMessage, chatMessages } from "./actions";
+import { socket } from "./socket";
 
 export default function Chat({ viewerId }) {
     const [message, setMessage] = useState("");
 
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
+    const textRef = useRef();
+
+    const messageChange = (e) => {
+        console.log("e.target: ", e.target.value);
+        console.log("textRef: ", textRef);
+        setMessage(e.target.value);
+        //textRef.current.value = e.target.value;
+        console.log("Message: ", message);
+    };
+
+    const sendMessage = (e) => {
+        console.log("Clicked");
+
+        var date = new Date();
+
+        socket.emit("sendMessage", message, date);
+        event.target.value = "";
+    };
 
     // useEffect(() => {
     //     dispatch(chatMessage());
@@ -22,13 +41,14 @@ export default function Chat({ viewerId }) {
         <>
             <h4>Chat: </h4>
 
-            <input
-                type="text"
+            <textarea
+                // type="text"
                 placeholder="chat"
                 name="chatMessage"
-                onChange={(e) => setMessage(e.target.value)}
-            ></input>
-            <button onClick={() => dispatch(chatMessage())}>Send</button>
+                onChange={(e) => messageChange(e)}
+            ></textarea>
+            <button onClick={() => sendMessage()}>Send</button>
+            {/* <button onClick={() => dispatch(chatMessage())}>Send</button> */}
         </>
     );
 }

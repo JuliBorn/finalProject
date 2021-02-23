@@ -112,3 +112,14 @@ module.exports.endFriendship = (viewerId, viewedId) => {
     const params = [viewerId, viewedId];
     return db.query(q, params);
 };
+
+module.exports.addChatMessage = (message, userId) => {
+    const q = `INSERT INTO chat (chat_message, sender_id) VALUES ($1,$2)`;
+    const params = [message, userId];
+    return db.query(q, params);
+};
+
+module.exports.getMessages = () => {
+    const q = `SELECT * FROM chat`;
+    return db.query(q);
+};
