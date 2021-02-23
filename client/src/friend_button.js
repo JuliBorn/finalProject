@@ -111,7 +111,7 @@ export default function FriendButton(props) {
                 setFriendshipStatus("noRequest");
                 console.log("Friendshipstatus: ", friendshipStatus, err);
             });
-    }, []);
+    }, [friendshipStatus]);
 
     ////RENDER STUFF
     if (friendshipStatus === "accepted") {

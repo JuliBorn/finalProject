@@ -41,3 +41,17 @@ export async function cancelFriend(viewedId) {
 
     //return { type: "ACCEPT_FRIEND", friendList: data };
 }
+
+export async function chatMessages(viewerId, message) {
+    //const data = { viewedId: viewedId };
+    const result = await axios.post("/api/chat", message);
+    console.log("Result Chat: ", result);
+    return { type: "GET_MESSAGES", messages: [] };
+}
+
+export async function chatMessage(message) {
+    //const data = { viewedId: viewedId };
+    const result = await axios.post("/api/chat/", message);
+    console.log("Result Chat: ", result);
+    return { type: "ACCEPT_FRIEND", friendList: data };
+}

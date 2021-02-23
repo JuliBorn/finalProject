@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getFriends, acceptFriend, cancelFriend, endFriend } from "./actions";
 
-export default function Friends() {
+export default function Friends({ viewerId }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -20,10 +20,22 @@ export default function Friends() {
             state.friendList.filter((user) => user.accepted)
     );
 
-    const friends_requests = useSelector(
+    const friends_requests_sent = useSelector(
         (state) =>
+            state &&
             state.friendList &&
-            state.friendList.filter((user) => !user.accepted)
+            state.friendList.filter(
+                (user) => !user.accepted && user.sender_id == viewerId
+            )
+    );
+
+    const friends_requests_got = useSelector(
+        (state) =>
+            state &&
+            state.friendList &&
+            state.friendList.filter(
+                (user) => !user.accepted && user.sender_id != viewerId
+            )
     );
 
     if (!friends) {
@@ -33,7 +45,7 @@ export default function Friends() {
     return (
         <>
             <h4>Request you sent: </h4>
-            {friends_requests.map((elem, index) => {
+            {friends_requests_sent.map((elem, index) => {
                 return (
                     <div className="user_card" key={index}>
                         <div>
@@ -49,7 +61,7 @@ export default function Friends() {
                 );
             })}
             <h4>Request you got: </h4>
-            {friends_requests.map((elem, index) => {
+            {friends_requests_got.map((elem, index) => {
                 return (
                     <div className="user_card" key={index}>
                         <div>

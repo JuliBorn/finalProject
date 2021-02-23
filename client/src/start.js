@@ -9,7 +9,9 @@ import { reducer } from "./reducer";
 
 import Welcome from "./welcome";
 import App from "./app";
+import { init } from "./socket";
 
+const socketInit = init();
 const store = createStore(
     reducer,
     composeWithDevTools(applyMiddleware(reduxPromise))

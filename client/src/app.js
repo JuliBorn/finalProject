@@ -9,6 +9,8 @@ import Profile from "./profile";
 import OtherProfile from "./other_profile";
 import FindUsers from "./find_users";
 import Friends from "./friends";
+import Chat from "./chat";
+
 import { reducer } from "./reducer";
 
 import Uploader from "./uploader";
@@ -127,7 +129,20 @@ export default class App extends Component {
                                     render={(props) => {
                                         return (
                                             <>
-                                                <Friends />
+                                                <Friends
+                                                    viewerId={this.state.id}
+                                                />
+                                            </>
+                                        );
+                                    }}
+                                />
+
+                                <Route
+                                    path="/chat"
+                                    render={(props) => {
+                                        return (
+                                            <>
+                                                <Chat />
                                             </>
                                         );
                                     }}
@@ -136,13 +151,15 @@ export default class App extends Component {
                                 {/* <Logo /> */}
                             </main>
                             <aside className="body_left">
-                                <p>LEFT</p>
                                 <Link to="/users" className="side_bar_text">
                                     Find Users
                                 </Link>
                                 <br></br>
                                 <Link to="/friends" className="side_bar_text">
                                     Friends
+                                </Link>
+                                <Link to="/chat" className="side_bar_text">
+                                    Chat
                                 </Link>
                             </aside>
                             <aside className="body_right">

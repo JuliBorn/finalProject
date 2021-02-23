@@ -24,5 +24,12 @@ export function reducer(state = {}, action) {
         };
     }
 
+    if (action.type === "GET_MESSAGES") {
+        state = {
+            ...state,
+            messages: [],
+        };
+    }
+
     return state;
 }
