@@ -59,60 +59,6 @@ module.exports.addBio = (bio, userId) => {
     return db.query(q, params);
 };
 
-module.exports.getUsersByName = (search) => {
-    const q = `SELECT * FROM users WHERE first ILIKE $1`;
-    const params = [search + "%"];
-    return db.query(q, params);
-};
-
-module.exports.getUsersLatest = () => {
-    const q = `SELECT * FROM users ORDER BY id DESC LIMIT 3;`;
-    return db.query(q);
-};
-
-module.exports.getFriendshipStatus = (viewerId, viewedId) => {
-    const q = `SELECT * FROM friendships
-            WHERE (recipient_id = $1 AND sender_id = $2)
-            OR (recipient_id = $2 AND sender_id = $1);`;
-    const params = [viewedId, viewerId];
-    return db.query(q, params);
-};
-
-module.exports.requestFriendship = (viewerId, viewedId) => {
-    const q = `INSERT INTO friendships (recipient_id, sender_id) VALUES ($1, $2) RETURNING id;`;
-    const params = [viewerId, viewedId];
-    return db.query(q, params);
-};
-
-module.exports.acceptFriendship = (viewerId, viewedId) => {
-    const q = `UPDATE friendships 
-            SET accepted = true 
-            WHERE (recipient_id = $1 AND sender_id = $2)
-            OR (recipient_id = $2 AND sender_id = $1);`;
-    const params = [viewerId, viewedId];
-    return db.query(q, params);
-};
-
-module.exports.getFriends = (viewerId) => {
-    const q = `SELECT users.id, first, last, profile_pic_url, accepted
-    FROM friendships
-    JOIN users
-    ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
-    OR (accepted = false AND sender_id = $1 AND recipient_id = users.id)
-    OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
-    OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)`;
-    const params = [viewerId];
-    return db.query(q, params);
-};
-
-module.exports.endFriendship = (viewerId, viewedId) => {
-    const q = `DELETE FROM friendships 
-            WHERE (recipient_id = $1 AND sender_id = $2)
-            OR (recipient_id = $2 AND sender_id = $1)`;
-    const params = [viewerId, viewedId];
-    return db.query(q, params);
-};
-
 module.exports.addChatMessage = (message, userId) => {
     const q = `INSERT INTO chat (chat_message, sender_id) VALUES ($1,$2)`;
     const params = [message, userId];

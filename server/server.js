@@ -10,7 +10,6 @@ const io = require("socket.io")(server, {
 });
 
 const auth_router = require("./auth_routes").router;
-const profile_router = require("./profile_routes").router;
 
 const compression = require("compression");
 const path = require("path");
@@ -63,7 +62,6 @@ app.use((req, res, next) => {
 });
 
 app.use(auth_router);
-app.use(profile_router);
 
 app.get("/profile", (req, res) => {
     //console.log("Get Profile", req);
@@ -79,152 +77,13 @@ app.get("/profile", (req, res) => {
         });
 });
 
-app.post(
-    "/profile/profile_pic/",
-    uploader.single("file"),
-    s3.upload,
-    (req, res) => {
-        //console.log("upload complete");
-        //console.log("Storing image for id: ", req.session.userId);
+// app.post("/api/chat", (req, res) => {
+//     console.log("Chat Route hit", req);
 
-        //console.log("req.file: ", req.file);
-        const url = awsUrl.s3Url + req.file.filename;
-        //console.log("URL: ", url);
-        db.upsertProfilePicUrl(url, req.session.userId)
-            .then((result) => {
-                //console.log("Result from DB", result.rows);
-                res.json({ profilePicUrl: result.rows[0].profile_pic_url });
-            })
-            .catch((err) => {
-                console.log("Error in DB", err);
-                res.json({ error: true });
-            });
-        //console.log("req.body URL: ", req.body.profilePicUrl);
-    }
-);
+//     const viewerId = req.session.userId;
 
-app.get("/api/users", (req, res) => {
-    //console.log("get Users route hit", req.query);
-
-    db.getUsersByName(req.query.input)
-        .then((result) => {
-            //console.log("Result from DB inc Search: ", result.rows);
-            res.json(result.rows);
-        })
-        .catch((err) => {
-            console.log("Error inc Search", err);
-        });
-});
-
-app.get("/api/users/latest", (req, res) => {
-    //console.log("get Users latest route hit");
-
-    db.getUsersLatest()
-        .then((result) => {
-            //console.log("Result from DB inc Search: ", result.rows);
-            res.json(result.rows);
-        })
-        .catch((err) => {
-            console.log("Error inc Search", err);
-        });
-});
-
-app.get("/api/users/friendships", (req, res) => {
-    const viewedId = req.query.viewedId;
-    const viewerId = req.session.userId;
-
-    //console.log("get Users friendships route hit, viewed", viewedId);
-    //console.log("get Users friendships route hit, viewer", viewerId);
-
-    db.getFriendshipStatus(viewedId, viewerId).then((result) => {
-        //console.log("Result from DB Friendship Status: ", result.rows[0]);
-        res.json(result.rows[0]);
-    });
-});
-
-app.post("/api/users/friendships/requestFriend", (req, res) => {
-    console.log("postUsers friendships ", req.body);
-    const viewedId = req.body.viewedId;
-    const viewerId = req.session.userId;
-
-    //console.log("post Users friendships route hit, viewed", viewedId);
-    //console.log("post Users friendships route hit, viewer", viewerId);
-
-    db.requestFriendship(viewedId, viewerId)
-        .then((result) => {
-            //console.log(result);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.post("/api/users/friendships/acceptRequest", (req, res) => {
-    //console.log("accept friendships ", req.body);
-    const viewedId = req.body.viewedId;
-    const viewerId = req.session.userId;
-
-    //console.log("accept friendships route hit, viewed", viewedId);
-    //console.log("accept friendships route hit, viewer", viewerId);
-
-    db.acceptFriendship(viewerId, viewedId)
-        .then((result) => {
-            //console.log("Result from DB", result);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.post("/api/users/friendships/endFriendship", (req, res) => {
-    //console.log("accept friendships ", req.body);
-    const viewedId = req.body.viewedId;
-    const viewerId = req.session.userId;
-
-    console.log("end friendships route hit, viewed", viewedId);
-    console.log("end friendships route hit, viewer", viewerId);
-
-    db.endFriendship(viewerId, viewedId)
-        .then((result) => {
-            //console.log("Result from DB", result);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.get("/api/users/friends", (req, res) => {
-    //console.log("Get Friends Route hit", req.body);
-
-    const viewerId = req.session.userId;
-
-    console.log("get friends, viewer", viewerId);
-
-    db.getFriends(viewerId)
-        .then((result) => {
-            console.log("Result from DB Friends", result.rows);
-            res.json(result.rows);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.get("/api/users/friends/accept", (req, res) => {
-    console.log("Accept Friends Route hit", req.body);
-
-    const viewerId = req.session.userId;
-
-    console.log("get friends, viewer", viewerId);
-});
-
-app.post("/api/chat", (req, res) => {
-    console.log("Chat Route hit", req);
-
-    const viewerId = req.session.userId;
-
-    //console.log("get friends, viewer", viewerId);
-});
+//     //console.log("get friends, viewer", viewerId);
+// });
 
 app.get("/api/chat", (req, res) => {
     console.log("GET Chat Route hit", req);

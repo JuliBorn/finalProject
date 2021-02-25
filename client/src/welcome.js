@@ -1,34 +1,29 @@
-// import Greetee from "./greetee";
-// import Counter from "./counter";
-// import Registration from "./registration";
-import { HashRouter, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 
 import Registration from "./registration";
 import Login from "./login";
-import ResetPassword from "./reset_password";
 
 import Header from "./header";
 import Footer from "./footer";
+import Recorder from "./recorder";
 
 export default function Welcome() {
     return (
-        <>
-            <div className="body">
-                <Header />
-                <div className="body_container">
-                    <HashRouter>
-                        <div>
-                            <Route exact path="/" component={Registration} />
-                            <Route path="/login" component={Login} />
-                            <Route
-                                path="/password-reset"
-                                component={ResetPassword}
-                            />
-                        </div>
-                    </HashRouter>
+        <div className="body">
+            <div className="body_content">
+                <div className="inside_content">
+                    <div className="welcome_left">
+                        <h5>Hello Left</h5>
+                    </div>
+                    <div className="welcome_right">
+                        <h5>Hello Right</h5>
+                    </div>
+
+                    <Recorder />
                 </div>
-                <Footer />
             </div>
-        </>
+            <Footer />
+        </div>
     );
 }
