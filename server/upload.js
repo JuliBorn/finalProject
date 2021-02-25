@@ -2,6 +2,7 @@ const multer = require("multer");
 const uidSafe = require("uid-safe");
 const path = require("path");
 
+console.log("MULTER");
 const diskStorage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, __dirname + "/uploads");
@@ -13,6 +14,7 @@ const diskStorage = multer.diskStorage({
     },
 });
 
+console.log("Multer storage", diskStorage);
 module.exports.uploader = multer({
     storage: diskStorage,
     limits: {

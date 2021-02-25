@@ -1,6 +1,6 @@
 import MicRecorder from "mic-recorder-to-mp3";
 import { Component } from "react";
-
+import axios from "axios";
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
 export default class Recorder extends Component {
@@ -30,6 +30,7 @@ export default class Recorder extends Component {
         if (this.state.isBlocked) {
             console.log("Permission Denied");
         } else {
+            console.log("Start Recording");
             Mp3Recorder.start()
                 .then(() => {
                     this.setState({ isRecording: true });
@@ -39,15 +40,28 @@ export default class Recorder extends Component {
     }
 
     stopRec() {
+        console.log("Stop Recording");
         Mp3Recorder.stop()
             .getMp3()
             .then(([buffer, blob]) => {
                 const blobURL = URL.createObjectURL(blob);
-                const file = new File(buffer, "me-at-thevoice.mp3", {
-                    type: blob.type,
-                    lastModified: Date.now(),
+                console.log("Bloburl", blobURL);
+                console.log("Blob", blob);
+
+                const fd = new FormData();
+
+                fd.append("audio/mp3", blob);
+
+                console.log("sending file", fd);
+
+                axios.post("/sound", fd).then((response) => {
+                    console
+                        .log("Response from Server after uploading", response)
+                        .catch((err) => {
+                            "Error uploading to server";
+                        });
+                    this.setState({ blobURL, isRecording: false });
                 });
-                this.setState({ blobURL, isRecording: false });
             })
             .catch((e) => console.log(e));
     }

@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 import { BrowserRouter, Route } from "react-router-dom";
 
-import Registration from "./registration";
-import Login from "./login";
-
 import Header from "./header";
 import Footer from "./footer";
 import Recorder from "./recorder";
