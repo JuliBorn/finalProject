@@ -42,16 +42,24 @@ export async function cancelFriend(viewedId) {
     //return { type: "ACCEPT_FRIEND", friendList: data };
 }
 
-export async function chatMessages(viewerId, message) {
-    //const data = { viewedId: viewedId };
-    const result = await axios.post("/api/chat", message);
-    console.log("Result Chat: ", result);
-    return { type: "GET_MESSAGES", messages: [] };
+export async function chatMessages(messages) {
+    console.log("Messages: ", messages);
+    //const result = await axios.get("/api/chat", message);
+    //console.log("Result Chat: ", result);
+    return { type: "GET_MESSAGES", messages };
 }
 
 export async function chatMessage(message) {
     //const data = { viewedId: viewedId };
-    const result = await axios.post("/api/chat/", message);
+    console.log("Action Chat Msg");
+    //const result = await axios.post("/api/chat/", message);
     console.log("Result Chat: ", result);
-    return { type: "ACCEPT_FRIEND", friendList: data };
+    return { type: "SEND_MESSAGE", message };
+}
+
+export function updateChatMessage(newMessage) {
+    return {
+        type: "UPDATE_MESSAGE",
+        newMessage,
+    };
 }

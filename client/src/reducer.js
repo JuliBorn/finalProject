@@ -25,11 +25,27 @@ export function reducer(state = {}, action) {
     }
 
     if (action.type === "GET_MESSAGES") {
+        console.log("In Reducer Chat");
         state = {
             ...state,
-            messages: [],
+            messages: action.messages,
+            cookie: action.cookie,
         };
     }
 
+    if (action.type === "SEND_MESSAGE") {
+        console.log("In Reducer Chat");
+        state = {
+            ...state,
+            message: action.message,
+        };
+    }
+
+    if (action.type === "UPDATE_MESSAGE") {
+        state = {
+            ...state,
+            messages: [...state.messages, action.newMessage],
+        };
+    }
     return state;
 }

@@ -226,6 +226,16 @@ app.post("/api/chat", (req, res) => {
     //console.log("get friends, viewer", viewerId);
 });
 
+app.get("/api/chat", (req, res) => {
+    console.log("GET Chat Route hit", req);
+
+    const viewerId = req.session.userId;
+    db.getMessages.then((result) => {
+        console.log("Result from DB Chat", result);
+    });
+    //console.log("get friends, viewer", viewerId);
+});
+
 app.get("*", (req, res) => {
     if (!req.session.userId) {
         // if user not logged in redirect to welcome
@@ -243,7 +253,7 @@ server.listen(process.env.PORT || 3001, function () {
 
 io.on("connection", (socket) => {});
 
-io.on("connection", function (socket) {
+io.on("connection", async (socket) => {
     console.log(`socket with the id ${socket.id} is now connected`);
 
     const { userId } = socket.request.session;
@@ -252,18 +262,27 @@ io.on("connection", function (socket) {
     }
     console.log("connected", userId);
 
-    socket.on("disconnect", function () {
-        console.log(`socket with the id ${socket.id} is now disconnected`);
+    // socket.on("disconnect", function () {
+    //     console.log(`socket with the id ${socket.id} is now disconnected`);
+    // });
+
+    socket.on("chatMessage", async (data) => {
+        try {
+            console.log("socket on sendmessage: ", data);
+            const result = await db.addChatMessage(data, userId);
+            const lastMsg = await db.showLastMessage();
+            console.log("Result laast Chat to DB", lastMsg.rows[0]);
+            io.emit("updateChatMessage", lastMsg.rows[0]);
+        } catch (err) {
+            console.log("IO Error", err);
+        }
     });
 
-    socket.on("sendMessage", function (data) {
-        console.log(data);
-        db.addChatMessage(data, userId).then((result) => {
-            console.log("Result adding Chat to DB");
-        });
-    });
+    try {
+        const messages = await db.getMessages();
 
-    socket.emit("welcome", {
-        message: "Welome. It is nice to see you",
-    });
+        io.emit("chatMessages", messages.rows.reverse());
+    } catch (err) {
+        console.log("err in chatMessage", err);
+    }
 });

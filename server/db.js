@@ -120,6 +120,21 @@ module.exports.addChatMessage = (message, userId) => {
 };
 
 module.exports.getMessages = () => {
-    const q = `SELECT * FROM chat`;
+    const q = `SELECT chat.sender_id,chat.chat_message, chat.created_at, users.first, users.last, users.profile_pic_url, chat.id 
+    FROM chat
+    join users
+    ON sender_id = users.id
+    ORDER BY chat.id DESC LIMIT 10
+    `;
+    return db.query(q);
+};
+
+module.exports.showLastMessage = () => {
+    const q = `SELECT chat.sender_id, chat.chat_message, chat.created_at, users.first, users.last, users.profile_pic_url, chat.id 
+    FROM chat
+    JOIN users
+    ON sender_id = users.id
+    ORDER BY chat.id DESC LIMIT 1`;
+
     return db.query(q);
 };

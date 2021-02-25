@@ -239,6 +239,41 @@ input {
     margin-top: 20px;
 }
 
+.chat_card {
+    display: grid;
+    grid-template-columns: 8fr 2fr 2fr;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 2px solid var(--prim);
+}
+
+.chat_text {
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 300;
+    text-align: center;
+    border: 1px solid rgba(50, 50, 50, 1);
+    background-color: var(--grey4);
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.chat_date {
+    text-align: center;
+    font-size: 8px;
+    position: relative;
+    bottom: -30px;
+    height: auto;
+    /* border: 2px solid rgb(0, 255, 106); */
+}
+
+.chat_user {
+    text-align: center;
+    margin: auto;
+    font-size: 12px;
+    /* border: 2px solid rgb(0, 255, 106); */
+}
+
 /* ////////////////////////////////////////////////////////////////////////////////////////// */
 
 .loader {
