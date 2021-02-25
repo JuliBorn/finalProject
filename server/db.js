@@ -10,3 +10,10 @@ module.exports.addSound = (soundUrl) => {
     const params = [soundUrl];
     return db.query(q, params);
 };
+
+module.exports.getSounds = () => {
+    const q = `SELECT * FROM sounds 
+    ORDER BY sounds.id DESC LIMIT 5`;
+    const params = [];
+    return db.query(q, params);
+};

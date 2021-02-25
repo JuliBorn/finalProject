@@ -1,6 +1,7 @@
 import MicRecorder from "mic-recorder-to-mp3";
 import { Component } from "react";
 import axios from "axios";
+
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
 export default class Recorder extends Component {
@@ -10,9 +11,17 @@ export default class Recorder extends Component {
             isRecording: false,
             blobURL: "",
             isBlocked: false,
+            chats: [],
         };
     }
     componentDidMount() {
+        axios
+            .get("/sounds")
+            .then((response) => [
+                console.log("Response from Server", response.data),
+                this.setState({ chats: response.data }),
+            ]);
+
         navigator.getUserMedia(
             { audio: true },
             () => {
@@ -85,7 +94,18 @@ export default class Recorder extends Component {
                 >
                     Stop
                 </button>
-                <audio src={this.state.blobURL} controls="controls" />
+                {this.state.chats.map((elem, index) => {
+                    return (
+                        <div className="chat_card" key={index}>
+                            <audio
+                                src={this.state.chats[index].sound_url}
+                                controls="controls"
+                                key={index}
+                            ></audio>
+                            {/* <p>{this.state.chats}</p> */}
+                        </div>
+                    );
+                })}
             </>
         );
     }

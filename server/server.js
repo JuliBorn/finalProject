@@ -20,16 +20,29 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
-});
+// app.get("/", (req, res) => {
+//     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+// });
 
-app.post("/sound", uploader.single("audio/mp3"), (req, res) => {
+app.post("/sound", uploader.single("audio/mp3"), s3.upload, (req, res) => {
     console.log("sound uploaded", req.file);
     const url = awsUrl.s3Url + req.file.filename;
     db.addSound(url)
         .then((result) => {
             console.log("Added to DB", result);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.get("/sounds", (req, res) => {
+    console.log("get sounds", req.body);
+    // const url = awsUrl.s3Url + req.file.filename;
+    db.getSounds()
+        .then((result) => {
+            console.log("Get to DB", result);
+            res.json(result.rows);
         })
         .catch((err) => {
             console.log(err);
