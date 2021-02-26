@@ -8,10 +8,10 @@ const shaders = Shaders.create({
 precision highp float;
 varying vec2 uv;
 uniform float value;
-floar r = 201/255;
-float g = 54/255
+// float r = 201/255;
+// float g = 54/255;
 void main() {
-  gl_FragColor = vec4(r+uv.x, g+uv.y, 0, 1.0);
+  gl_FragColor = vec4(uv.x+value, uv.y, 0, 1.0);
 }`,
     },
 });
