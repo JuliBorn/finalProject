@@ -6,6 +6,9 @@ import Header from "./header";
 import Footer from "./footer";
 import Recorder from "./recorder";
 
+import HelloBlue from "./shader";
+import { Surface } from "gl-react-dom"; // for React DOM
+
 export default class App extends Component {
     constructor() {
         super();
@@ -25,6 +28,9 @@ export default class App extends Component {
         return (
             <>
                 <Recorder />
+                <Surface width={300} height={300}>
+                    <HelloBlue blue={0.5} />
+                </Surface>
                 <Footer />
             </>
         );

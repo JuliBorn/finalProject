@@ -2,7 +2,8 @@ import MicRecorder from "mic-recorder-to-mp3";
 import { Component } from "react";
 import axios from "axios";
 
-const Mp3Recorder = new MicRecorder({ bitRate: 128 });
+const Mp3Recorder = new MicRecorder({ bitRate: 256 });
+
 
 export default class Recorder extends Component {
     constructor() {
