@@ -1,14 +1,17 @@
 import React from "react";
 import { Shaders, Node, GLSL } from "gl-react";
 
+///default orange = 201,54,0
 const shaders = Shaders.create({
     helloBlue: {
         frag: GLSL`
 precision highp float;
 varying vec2 uv;
 uniform float value;
+floar r = 201/255;
+float g = 54/255
 void main() {
-  gl_FragColor = vec4(1, uv.y, value, 1.0);
+  gl_FragColor = vec4(r+uv.x, g+uv.y, 0, 1.0);
 }`,
     },
 });

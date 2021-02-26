@@ -28,9 +28,9 @@ export default class App extends Component {
         return (
             <>
                 <Recorder />
-                {/* <Surface width={300} height={300}>
+                <Surface width={300} height={300}>
                     <HelloBlue />
-                </Surface> */}
+                </Surface>
                 <Footer />
             </>
         );
