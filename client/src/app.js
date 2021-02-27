@@ -1,13 +1,14 @@
-import axios from "axios";
-
 import { Component } from "react";
 
-import Header from "./header";
 import Footer from "./footer";
 import Recorder from "./recorder";
 
 import HelloBlue from "./shader";
 import { Surface } from "gl-react-dom"; // for React DOM
+import Waveform from "./player";
+
+import Chat from "./chat";
+//import TonePlayer from "./tone";
 
 export default class App extends Component {
     constructor() {
@@ -15,24 +16,21 @@ export default class App extends Component {
         this.state = {};
     }
 
-    logout() {
-        //req.session = null;
-        axios.get("/logout").then((response) => {
-            //console.log("Logout Response: ", response);
-            location.replace("/welcome");
-        });
-    }
     render() {
         //console.log("This App State: ", this.state);
 
         return (
-            <>
+            <div className="body">
+                <Chat />
+
+
                 <Recorder />
-                <Surface width={300} height={300}>
+                {/* <Waveform url={"./sounds/kick.wav"} /> */}
+                <Surface width={400} height={400} className="shader_background">
                     <HelloBlue />
                 </Surface>
                 <Footer />
-            </>
+            </div>
         );
     }
 }

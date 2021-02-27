@@ -2,8 +2,15 @@ import MicRecorder from "mic-recorder-to-mp3";
 import { Component } from "react";
 import axios from "axios";
 
-const Mp3Recorder = new MicRecorder({ bitRate: 256 });
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faCoffee,
+    faMicrophone,
+    faMicrophoneAlt,
+    faMicrophoneSlash,
+} from "@fortawesome/free-solid-svg-icons";
 
+const Mp3Recorder = new MicRecorder({ bitRate: 256 });
 
 export default class Recorder extends Component {
     constructor() {
@@ -16,13 +23,10 @@ export default class Recorder extends Component {
         };
     }
     componentDidMount() {
-        axios
-            .get("/sounds")
-            .then((response) => [
-                console.log("Response from Server", response.data),
-                this.setState({ chats: response.data }),
-            ]);
-
+        navigator.getUserMedia =
+            navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia;
         navigator.getUserMedia(
             { audio: true },
             () => {
@@ -79,34 +83,30 @@ export default class Recorder extends Component {
     render() {
         return (
             <>
-                <button
-                    onClick={() => {
-                        this.startRec();
-                    }}
-                    disabled={this.state.isRecording}
-                >
-                    Record
-                </button>
-                <button
-                    onClick={() => {
-                        this.stopRec();
-                    }}
-                    disabled={!this.state.isRecording}
-                >
-                    Stop
-                </button>
-                {this.state.chats.map((elem, index) => {
-                    return (
-                        <div className="chat_card" key={index}>
-                            <audio
-                                src={this.state.chats[index].sound_url}
-                                controls="controls"
-                                key={index}
-                            ></audio>
-                            {/* <p>{this.state.chats}</p> */}
-                        </div>
-                    );
-                })}
+                {!this.state.isRecording && (
+                    <button
+                        onClick={() => {
+                            this.startRec();
+                        }}
+                        // disabled={this.state.isRecording}
+                        className="record_button"
+                    >
+                        <FontAwesomeIcon
+                            icon={faMicrophoneAlt}
+                            className="icon"
+                        />
+                    </button>
+                )}
+                {this.state.isRecording && (
+                    <button
+                        onClick={() => {
+                            this.stopRec();
+                        }}
+                        className="record_button"
+                    >
+                        <FontAwesomeIcon icon={faMicrophoneSlash} />
+                    </button>
+                )}
             </>
         );
     }

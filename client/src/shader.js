@@ -1,41 +1,29 @@
 import React from "react";
+//import {render} from "react-dom"
 import { Shaders, Node, GLSL } from "gl-react";
 
-///default orange = 201,54,0
 const shaders = Shaders.create({
     helloBlue: {
-        frag: GLSL`
-precision highp float;
-varying vec2 uv;
-uniform float value;
-// float r = 201/255;
-// float g = 54/255;
+        frag: GLSL`precision highp float;
+        varying vec2 uv;
 void main() {
-  gl_FragColor = vec4(uv.x+value, uv.y, 0, 1.0);
-}`,
+    vec3 toColor = vec3(0.7568,0.0549,0);
+    vec3 fromColor = vec3(.8,0.3,0);
+  float d = 2.0 * distance(uv, vec2(0.5));
+  gl_FragColor = mix(
+    vec4(mix(fromColor, toColor, d), 1.0),
+    vec4(0.0),
+    step(1.0, d)
+  );
+}
+`,
     },
 });
+
 class HelloBlue extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: 0,
-        };
-    }
-
-    componentDidMount() {
-        const loop = (time) => {
-            this.raf = requestAnimationFrame(loop);
-            this.setState({
-                value: (1 + Math.cos(time / 1000)) / 2, // cycle between 0 and 1
-            });
-        };
-        this.raf = requestAnimationFrame(loop);
-    }
-
     render() {
-        const { value } = this.state;
-        return <Node shader={shaders.helloBlue} uniforms={{ value }} />;
+        const { blue } = this.props;
+        return <Node shader={shaders.helloBlue} uniforms={{ blue }} />;
     }
 }
 
