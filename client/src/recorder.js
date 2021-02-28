@@ -20,6 +20,7 @@ export default class Recorder extends Component {
             blobURL: "",
             isBlocked: false,
             chats: [],
+            frameCounter: 0,
         };
     }
     componentDidMount() {
@@ -55,6 +56,7 @@ export default class Recorder extends Component {
 
     stopRec() {
         console.log("Stop Recording");
+        this.setState({ isRecording: false });
         Mp3Recorder.stop()
             .getMp3()
             .then(([buffer, blob]) => {
@@ -74,7 +76,7 @@ export default class Recorder extends Component {
                         .catch((err) => {
                             "Error uploading to server";
                         });
-                    this.setState({ blobURL, isRecording: false });
+                    this.setState({ blobURL: false });
                 });
             })
             .catch((e) => console.log(e));

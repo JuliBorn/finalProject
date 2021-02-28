@@ -18,9 +18,20 @@ export default class Chat extends Component {
 
     render() {
         const elem = this.state.chats.map((elem, index) => {
+            let date = new Date(elem.created_at);
+            console.log(
+                "date",
+                date.toLocaleDateString(),
+                "time",
+                date.toLocaleTimeString()
+            );
             return (
                 <div key={index}>
-                    <Bubble url={elem.sound_url} />
+                    <Bubble
+                        url={elem.sound_url}
+                        date={date.toLocaleDateString()}
+                        time={date.toLocaleTimeString()}
+                    />
                 </div>
             );
         });

@@ -25,6 +25,7 @@ export default class Bubble extends Component {
                     ref={(element) => {
                         this.rap = element;
                     }}
+                    crossorigin="use-credentials"
                 />
                 <button
                     onClick={() => {
@@ -34,7 +35,7 @@ export default class Bubble extends Component {
                 >
                     <FontAwesomeIcon
                         icon={faPlayCircle}
-                        style={{ color: "#c10e00", size: "large" }}
+                        style={{ color: "#c10e00" }}
                     />
                 </button>
                 <p className="text_date">{this.props.date}</p>

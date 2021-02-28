@@ -7,17 +7,20 @@
 
     font-family: "Karla", sans-serif;
     font-weight: lighter;
-    user-select: none;
+    /* user-select: none; */
 }
 
 .body {
     margin: 0;
     background-color: #c10e00;
+    height: 2000px;
+    z-index: -1;
+    display: flex;
 }
 
 footer {
     height: 50px;
-    margin-top: -50px;
+
     /* background-color: yellow; */
 }
 
@@ -27,6 +30,7 @@ footer {
     top: 70%;
     transform: translate(-50%, -50%);
     z-index: 0;
+    /* border: 2px solid green; */
 }
 
 .record_button {
@@ -62,6 +66,7 @@ footer {
 
 .bubble_container {
     display: flex;
+
     /* border: 2px solid green; */
 }
 

@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 //     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 // });
 
-app.post("/sound", uploader.single("audio/mp3"), s3.upload, (req, res) => {
+app.post("/sound", uploader.single("audio/mp3"), (req, res) => {
     console.log("sound uploaded", req.file);
     const url = awsUrl.s3Url + req.file.filename;
     db.addSound(url)
