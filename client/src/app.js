@@ -17,7 +17,13 @@ export default class App extends Component {
 
     updateChat(state) {
         console.log("updating", state);
-        // this.setState({ chats: state });
+        axios.get("/sounds").then((response) => {
+            console.log("Response from Server Bubble", response.data);
+            this.setState({ chats: response.data });
+            console.log(response.data.length, " sounds found");
+            console.log(this.state.chats, "state chats");
+        });
+       
     }
 
     componentDidMount() {

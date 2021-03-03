@@ -8,17 +8,15 @@ export default class Chat extends Component {
         super(props);
     }
 
-    // componentDidUpdate(prevProps) {
-    //     if (prevProps.chats !== this.state.chats) {
-    //         console.log("new props");
-    //     }
-    // }
-
-    componentWillMount() {
+    componentDidMount() {
         console.log("Chat props", this.props);
     }
+
+    playAll(){
+        
+    }
     render() {
-        if (this.props.chat) {
+        if (this.props.chats) {
             const elem = this.props.chats.map((elem, index) => {
                 let date = new Date(elem.created_at);
                 console.log(

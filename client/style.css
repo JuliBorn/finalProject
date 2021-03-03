@@ -128,3 +128,8 @@ footer {
 .recorderText {
     font-size: 20px;
 }
+
+.recModal {
+    background-color: pink
+    ;
+}

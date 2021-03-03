@@ -115,6 +115,9 @@ export default class Recorder extends Component {
                         <FontAwesomeIcon icon={faMicrophoneSlash} />
                     </button>
                 )}
+                {this.state.recModal && (
+                    <div className="recModal">Enter Name</div>
+                )}
             </>
         );
     }
