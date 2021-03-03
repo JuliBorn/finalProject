@@ -18,7 +18,7 @@ export default class Bubble extends Component {
     }
     render() {
         return (
-            <div className="bubble">
+            <div className="bubble floating">
                 <ReactAudioPlayer
                     src={this.props.url}
                     preload="auto"

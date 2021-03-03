@@ -6,7 +6,7 @@ var db = spicedPg(
 );
 
 module.exports.addSound = (soundUrl) => {
-    const q = `INSERT INTO sounds (sound_url) VALUES ($1)`;
+    const q = `INSERT INTO sounds (sound_url) VALUES ($1) RETURNING id`;
     const params = [soundUrl];
     return db.query(q, params);
 };

@@ -30,6 +30,7 @@ app.post("/sound", uploader.single("audio/mp3"), s3.upload, (req, res) => {
     db.addSound(url)
         .then((result) => {
             console.log("Added to DB", result);
+            res.json(result.rows[0]);
         })
         .catch((err) => {
             console.log(err);

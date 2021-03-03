@@ -1,31 +1,43 @@
 import { Component } from "react";
+import axios from "axios";
 
-import Footer from "./footer";
 import Recorder from "./recorder";
 
 import RecButton from "./shader";
 import { Surface } from "gl-react-dom"; // for React DOM
-import Waveform from "./player";
 
 import Chat from "./chat";
-//import TonePlayer from "./tone";
 
 export default class App extends Component {
-    constructor() {
-        super();
-        this.state = { fader: 0.2, frameCounter: 0 };
+    constructor(props) {
+        super(props);
+        this.state = { fader: 0.2, frameCounter: 0, chats: [] };
+        this.updateChat = this.updateChat.bind(this);
     }
 
+    updateChat(state) {
+        console.log("updating", state);
+        // this.setState({ chats: state });
+    }
+
+    componentDidMount() {
+        axios.get("/sounds").then((response) => {
+            console.log("Response from Server Bubble", response.data);
+            this.setState({ chats: response.data });
+            console.log(response.data.length, " sounds found");
+            console.log(this.state.chats, "state chats");
+        });
+    }
     render() {
         //console.log("This App State: ", this.state);
 
         return (
             <>
                 <div className="body">
-                    <Chat />
+                    <Chat chats={this.state.chats} />
 
-                    <Recorder />
-                    {/* <Waveform url={"./sounds/kick.wav"} /> */}
+                    <Recorder updateChat={this.updateChat} />
+
                     <Surface
                         width={400}
                         height={400}
@@ -34,7 +46,6 @@ export default class App extends Component {
                         <RecButton fader={this.state.fader} />
                     </Surface>
                 </div>
-                <Footer />
             </>
         );
     }

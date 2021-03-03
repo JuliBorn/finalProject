@@ -13,13 +13,13 @@ import {
 const Mp3Recorder = new MicRecorder({ bitRate: 256 });
 
 export default class Recorder extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             isRecording: false,
             blobURL: "",
             isBlocked: false,
-            chats: [],
+
             frameCounter: 0,
         };
     }
@@ -57,6 +57,7 @@ export default class Recorder extends Component {
     stopRec() {
         console.log("Stop Recording");
         this.setState({ isRecording: false });
+        const that = this;
         Mp3Recorder.stop()
             .getMp3()
             .then(([buffer, blob]) => {
@@ -71,12 +72,14 @@ export default class Recorder extends Component {
                 console.log("sending file", fd);
 
                 axios.post("/sound", fd).then((response) => {
-                    console
-                        .log("Response from Server after uploading", response)
-                        .catch((err) => {
-                            "Error uploading to server";
-                        });
-                    this.setState({ blobURL: false });
+                    console.log(
+                        "Response from Server after uploading",
+                        response
+                    );
+
+                    that.props.updateChat(response.data.id);
+
+                    that.setState({ blobURL: false });
                 });
             })
             .catch((e) => console.log(e));
@@ -86,18 +89,21 @@ export default class Recorder extends Component {
         return (
             <>
                 {!this.state.isRecording && (
-                    <button
-                        onClick={() => {
-                            this.startRec();
-                        }}
-                        // disabled={this.state.isRecording}
-                        className="record_button"
-                    >
-                        <FontAwesomeIcon
-                            icon={faMicrophoneAlt}
-                            className="icon"
-                        />
-                    </button>
+                    <>
+                        <button
+                            onClick={() => {
+                                this.startRec();
+                            }}
+                            // disabled={this.state.isRecording}
+                            className="record_button"
+                        >
+                            <FontAwesomeIcon
+                                icon={faMicrophoneAlt}
+                                className="icon"
+                            />
+                        </button>
+                        <p className="recorderText"></p>
+                    </>
                 )}
                 {this.state.isRecording && (
                     <button
