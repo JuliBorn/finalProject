@@ -19,8 +19,10 @@ export default class Recorder extends Component {
             isRecording: false,
             blobURL: "",
             isBlocked: false,
-
+            recModal: false,
             frameCounter: 0,
+            recName: "",
+            blob: null,
         };
     }
     componentDidMount() {
@@ -58,6 +60,7 @@ export default class Recorder extends Component {
         console.log("Stop Recording");
         this.setState({ isRecording: false });
         const that = this;
+
         Mp3Recorder.stop()
             .getMp3()
             .then(([buffer, blob]) => {
@@ -65,24 +68,33 @@ export default class Recorder extends Component {
                 console.log("Bloburl", blobURL);
                 console.log("Blob", blob);
 
-                const fd = new FormData();
-
-                fd.append("audio/mp3", blob);
-
-                console.log("sending file", fd);
-
-                axios.post("/sound", fd).then((response) => {
-                    console.log(
-                        "Response from Server after uploading",
-                        response
-                    );
-
-                    that.props.updateChat(response.data.id);
-
-                    that.setState({ blobURL: false });
-                });
+                that.setState({ recModal: true });
+                that.setState({ blob: blob });
             })
             .catch((e) => console.log(e));
+    }
+
+    sendRec() {
+        console.log("Sending File");
+        const fd = new FormData();
+        const blob = this.state.blob;
+
+        fd.append("audio/mp3", blob);
+        fd.append("recName", this.state.recName);
+        console.log("rec name", this.state.recName);
+        const that = this;
+        console.log("sending file", fd);
+        axios.post("/sound", fd).then((response) => {
+            console.log("Response from Server after uploading", response);
+            that.props.updateChat(response.data.id);
+            that.setState({ blobURL: false });
+            that.setState({ recModal: false });
+        });
+    }
+    handleChange(e) {
+        console.log(e.target.value, "changed");
+
+        this.setState({ recName: e.target.value });
     }
 
     render() {
@@ -116,7 +128,28 @@ export default class Recorder extends Component {
                     </button>
                 )}
                 {this.state.recModal && (
-                    <div className="recModal">Enter Name</div>
+                    <div className="recModal">
+                        <div className="recModalInput">
+                            <input
+                                placeholder="Enter Name here"
+                                name="chatMessageName"
+                                type="text"
+                                onChange={(e) => this.handleChange(e)}
+                            ></input>
+                            <select>
+                                <option>Voice Recording</option>
+                                <option>Music Recording</option>
+                                <option>Field Recording</option>
+                            </select>
+                            <button
+                                onClick={() => {
+                                    this.sendRec();
+                                }}
+                            >
+                                Send
+                            </button>
+                        </div>
+                    </div>
                 )}
             </>
         );

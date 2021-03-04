@@ -12,9 +12,7 @@ export default class Chat extends Component {
         console.log("Chat props", this.props);
     }
 
-    playAll(){
-        
-    }
+    playAll() {}
     render() {
         if (this.props.chats) {
             const elem = this.props.chats.map((elem, index) => {
@@ -29,6 +27,7 @@ export default class Chat extends Component {
                     <div key={index}>
                         <Bubble
                             url={elem.sound_url}
+                            recName={elem.rec_name}
                             date={date.toLocaleDateString()}
                             time={date.toLocaleTimeString()}
                         />

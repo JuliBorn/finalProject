@@ -24,10 +24,12 @@ app.use((req, res, next) => {
 //     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 // });
 
-app.post("/sound", uploader.single("audio/mp3"), s3.upload, (req, res) => {
+app.post("/sound", uploader.single("audio/mp3"), (req, res) => {
     console.log("sound uploaded", req.file);
     const url = awsUrl.s3Url + req.file.filename;
-    db.addSound(url)
+
+    console.log("Req.body", req.body);
+    db.addSound(url, req.body.recName)
         .then((result) => {
             console.log("Added to DB", result);
             res.json(result.rows[0]);
@@ -38,11 +40,11 @@ app.post("/sound", uploader.single("audio/mp3"), s3.upload, (req, res) => {
 });
 
 app.get("/sounds", (req, res) => {
-    console.log("get sounds", req.body);
+    //console.log("get sounds", req.body);
     // const url = awsUrl.s3Url + req.file.filename;
     db.getSounds()
         .then((result) => {
-            console.log("Get to DB", result);
+            //console.log("Get to DB", result);
             res.json(result.rows);
         })
         .catch((err) => {

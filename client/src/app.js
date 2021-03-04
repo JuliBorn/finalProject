@@ -23,13 +23,13 @@ export default class App extends Component {
             console.log(response.data.length, " sounds found");
             console.log(this.state.chats, "state chats");
         });
-       
     }
 
     componentDidMount() {
         axios.get("/sounds").then((response) => {
             console.log("Response from Server Bubble", response.data);
             this.setState({ chats: response.data });
+
             console.log(response.data.length, " sounds found");
             console.log(this.state.chats, "state chats");
         });

@@ -38,6 +38,7 @@ export default class Bubble extends Component {
                         style={{ color: "#c10e00" }}
                     />
                 </button>
+                <p className="text_date">{this.props.recName}</p>
                 <p className="text_date">{this.props.date}</p>
                 <p className="text_date">{this.props.time}</p>
             </div>
