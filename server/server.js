@@ -24,12 +24,12 @@ app.use((req, res, next) => {
 //     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 // });
 
-app.post("/sound", uploader.single("audio/mp3"), (req, res) => {
+app.post("/sound", uploader.single("audio/mp3"), s3.upload, (req, res) => {
     console.log("sound uploaded", req.file);
     const url = awsUrl.s3Url + req.file.filename;
 
     console.log("Req.body", req.body);
-    db.addSound(url, req.body.recName)
+    db.addSound(url, req.body.recName, req.body.category)
         .then((result) => {
             console.log("Added to DB", result);
             res.json(result.rows[0]);

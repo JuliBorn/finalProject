@@ -18,7 +18,12 @@ export default class Bubble extends Component {
     }
     render() {
         return (
-            <div className="bubble floating">
+            <div
+                className={`bubble floating ${this.props.category}`}
+                onClick={() => {
+                    this.play();
+                }}
+            >
                 <ReactAudioPlayer
                     src={this.props.url}
                     preload="auto"
@@ -27,18 +32,9 @@ export default class Bubble extends Component {
                     }}
                     crossorigin="use-credentials"
                 />
-                <button
-                    onClick={() => {
-                        this.play();
-                    }}
-                    className="bubble_play"
-                >
-                    <FontAwesomeIcon
-                        icon={faPlayCircle}
-                        style={{ color: "#c10e00" }}
-                    />
-                </button>
-                <p className="text_date">{this.props.recName}</p>
+
+                <p className="text_date text_name">{this.props.recName}</p>
+
                 <p className="text_date">{this.props.date}</p>
                 <p className="text_date">{this.props.time}</p>
             </div>

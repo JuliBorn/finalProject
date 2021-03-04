@@ -28,6 +28,7 @@ export default class Chat extends Component {
                         <Bubble
                             url={elem.sound_url}
                             recName={elem.rec_name}
+                            category={elem.category}
                             date={date.toLocaleDateString()}
                             time={date.toLocaleTimeString()}
                         />

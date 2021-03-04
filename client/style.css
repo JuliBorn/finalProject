@@ -2,25 +2,18 @@
 * {
     box-sizing: border-box;
     font-size: 36px;
-    /* margin: 0px; */
-    /* background-color: #c93600; */
     font-family: "Karla", sans-serif;
     font-weight: lighter;
     /* user-select: none; */
     /* overflow: hidden; */
 }
 
-.body {
-    margin: 0;
+body {
     background-color: #c10e00;
     z-index: -1;
-    display: flex;
-    height: 100vw;
 }
-
-footer {
-    height: 50px;
-    /* background-color: yellow; */
+.body {
+    margin: 0;
 }
 
 .shader_background {
@@ -28,7 +21,7 @@ footer {
     left: 50%;
     top: 70%;
     transform: translate(-50%, -50%);
-    z-index: 0;
+    z-index: -1;
     /* border: 2px solid green; */
 }
 
@@ -65,15 +58,18 @@ footer {
 }
 
 .bubble_container {
-    display: flex;
-    width: 100%;
-    /* border: 2px solid green; */
+    position: absolute;
+    min-width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    z-index: 1;
 }
 
 .bubble {
     margin: 10px;
     padding: 10px;
-    border: 2px solid white;
+    border: 4px solid white;
     width: 170px;
     height: 150px;
     background-color: rgba(255, 255, 255, 1);
@@ -97,9 +93,14 @@ footer {
     font-size: 16px;
     font-weight: lighter;
     background: none;
-    color: #c10e00;
+    color: white;
     text-align: right;
     line-height: 0;
+}
+
+.text_name {
+    font-size: 24px;
+    font-weight: normal;
 }
 
 .floating {
@@ -158,4 +159,16 @@ footer {
     background: rgb(240, 240, 240);
     font-size: 10pt;
     text-decoration: none;
+}
+
+.Voice {
+    background-color: #786002;
+}
+
+.Field {
+    background-color: #135327;
+}
+
+.Music {
+    background-color: #202030;
 }

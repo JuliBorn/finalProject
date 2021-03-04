@@ -22,6 +22,7 @@ export default class Recorder extends Component {
             recModal: false,
             frameCounter: 0,
             recName: "",
+            category: "Voice",
             blob: null,
         };
     }
@@ -81,7 +82,10 @@ export default class Recorder extends Component {
 
         fd.append("audio/mp3", blob);
         fd.append("recName", this.state.recName);
+        fd.append("category", this.state.category);
         console.log("rec name", this.state.recName);
+
+        console.log("rec name", this.state.category);
         const that = this;
         console.log("sending file", fd);
         axios.post("/sound", fd).then((response) => {
@@ -93,8 +97,7 @@ export default class Recorder extends Component {
     }
     handleChange(e) {
         console.log(e.target.value, "changed");
-
-        this.setState({ recName: e.target.value });
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     render() {
@@ -132,14 +135,18 @@ export default class Recorder extends Component {
                         <div className="recModalInput">
                             <input
                                 placeholder="Enter Name here"
-                                name="chatMessageName"
+                                name="recName"
                                 type="text"
                                 onChange={(e) => this.handleChange(e)}
+                                autoComplete="off"
                             ></input>
-                            <select>
-                                <option>Voice Recording</option>
-                                <option>Music Recording</option>
-                                <option>Field Recording</option>
+                            <select
+                                name="category"
+                                onChange={(e) => this.handleChange(e)}
+                            >
+                                <option>Voice</option>
+                                <option>Music</option>
+                                <option>Field</option>
                             </select>
                             <button
                                 onClick={() => {
