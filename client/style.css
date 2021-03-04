@@ -133,6 +133,11 @@ body {
 
 .recorderText {
     font-size: 20px;
+    position: fixed;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%);
+    color: white;
 }
 
 .recModal {

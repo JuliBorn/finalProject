@@ -117,18 +117,21 @@ export default class Recorder extends Component {
                                 className="icon"
                             />
                         </button>
-                        <p className="recorderText"></p>
+                        <p className="recorderText">Press to record</p>
                     </>
                 )}
                 {this.state.isRecording && (
-                    <button
-                        onClick={() => {
-                            this.stopRec();
-                        }}
-                        className="record_button"
-                    >
-                        <FontAwesomeIcon icon={faMicrophoneSlash} />
-                    </button>
+                    <>
+                        <button
+                            onClick={() => {
+                                this.stopRec();
+                            }}
+                            className="record_button"
+                        >
+                            <FontAwesomeIcon icon={faMicrophoneSlash} />
+                        </button>
+                        <p className="recorderText">Stop recording</p>
+                    </>
                 )}
                 {this.state.recModal && (
                     <div className="recModal">
