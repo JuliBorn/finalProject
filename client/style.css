@@ -166,6 +166,26 @@ body {
     text-decoration: none;
 }
 
+.recModalInputField {
+    outline: none;
+    border: none;
+    font-size: 16pt;
+    text-decoration: none;
+    background: rgb(240, 240, 240);
+    padding: 10px;
+    color: #c10e00;
+}
+
+.recModalInputButton {
+    outline: none;
+    border: none;
+    font-size: 16pt;
+    text-decoration: none;
+    background: rgb(240, 240, 240);
+    padding: 10px;
+    background-color: #c10e00;
+    color: white;
+}
 .Voice {
     background-color: #786002;
 }

@@ -142,19 +142,28 @@ export default class Recorder extends Component {
                                 type="text"
                                 onChange={(e) => this.handleChange(e)}
                                 autoComplete="off"
+                                className="recModalInputField"
                             ></input>
                             <select
                                 name="category"
                                 onChange={(e) => this.handleChange(e)}
+                                className="recModalInputField"
                             >
-                                <option>Voice</option>
-                                <option>Music</option>
-                                <option>Field</option>
+                                <option className="recModalInputField">
+                                    Voice
+                                </option>
+                                <option className="recModalInputField">
+                                    Music
+                                </option>
+                                <option className="recModalInputField">
+                                    Field
+                                </option>
                             </select>
                             <button
                                 onClick={() => {
                                     this.sendRec();
                                 }}
+                                className="recModalInputField"
                             >
                                 Send
                             </button>
